@@ -1,6 +1,8 @@
 import asyncio
 import os
+import re
 from logging.config import fileConfig
+from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
@@ -23,12 +25,33 @@ if config.config_file_name is not None:
 from models import Base
 target_metadata = Base.metadata
 
+
+def clean_asyncpg_url(db_url: str) -> str:
+    """Convert to asyncpg URL and strip psycopg2-only params."""
+    if not db_url:
+        return db_url
+        
+    # Convert postgresql:// to postgresql+asyncpg://
+    db_url = re.sub(r'^postgresql:', 'postgresql+asyncpg:', db_url)
+
+    parsed = urlparse(db_url)
+    query_params = parse_qs(parsed.query)
+
+    # Remove unsupported asyncpg params
+    for param in ["sslmode", "channel_binding", "gssencmode"]:
+        query_params.pop(param, None)
+
+    # Build new query string
+    new_query = urlencode(query_params, doseq=True)
+    return urlunparse(parsed._replace(query=new_query))
+
+
 # Get database URL from environment
 database_url = os.getenv("DATABASE_URL")
 
-# Convert to asyncpg if needed
+# Convert to asyncpg if needed and clean parameters
 if database_url:
-    database_url = database_url.replace("postgresql://", "postgresql+asyncpg://")
+    database_url = clean_asyncpg_url(database_url)
     config.set_main_option("sqlalchemy.url", database_url)
 
 
@@ -77,18 +100,17 @@ async def run_async_migrations() -> None:
     a connection with the context.
     """
     
-    # Create async engine
-    configuration = {
-        "sqlalchemy.url": config.get_main_option("sqlalchemy.url"),
-        "sqlalchemy.poolclass": pool.NullPool,
-        "sqlalchemy.echo": False,
-    }
+    # Get the database URL and clean it for asyncpg
+    database_url = config.get_main_option("sqlalchemy.url")
     
-    connectable = async_engine_from_config(
-        configuration,
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
+    if not database_url:
+        raise ValueError("DATABASE_URL environment variable not set")
+    
+    # Create async engine directly (avoids SSL mode issues)
+    connectable = create_async_engine(
+        database_url,
         echo=False,
+        poolclass=pool.NullPool,
     )
 
     async with connectable.connect() as connection:
