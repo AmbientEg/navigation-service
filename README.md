@@ -52,3 +52,10 @@ CREATE TABLE floors (
 );
 ```
 
+
+
+Refrences :
+https://eng-badrqabbari.medium.com/using-dijkstras-algorithm-for-indoor-navigation-in-a-flutter-app-3d346c0ede23
+https://www.researchgate.net/publication/349495339_A_New_Approach_to_Measuring_the_Similarity_of_Indoor_Semantic_Trajectories
+https://www.researchgate.net/publication/341465979_The_Construction_of_a_Network_for_Indoor_Navigation
+
