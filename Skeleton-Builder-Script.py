@@ -116,6 +116,7 @@ for door_geom, door_props in doors:
     # Add projection node
     G.add_node(proj_coords, type="corridor")
 
+    # bug: problem here, it removes the edges that connects corridor points all of them
     # Remove original edge before splitting
     # coords = list(best_line.coords)
     # for i in range(len(coords) - 1):
@@ -195,35 +196,59 @@ for room_geom, room_props in rooms:
 print("Rooms attached")
 
 # =========================
-# EXPORT GRAPH TO GEOJSON
+# EXPORT GRAPH TO GEOJSON (WITH IDS)
 # =========================
 features = []
 
-# Export nodes
+# -------------------------
+# Assign unique IDs to nodes
+# -------------------------
+node_id_map = {}
+node_counter = 1
+
+for node in G.nodes():
+    node_id_map[node] = node_counter
+    node_counter += 1
+
+# -------------------------
+# Export nodes with IDs
+# -------------------------
 for node, attrs in G.nodes(data=True):
     features.append({
         "type": "Feature",
         "geometry": mapping(Point(node)),
         "properties": {
             "feature_type": "node",
+            "node_id": node_id_map[node],
             "node_type": attrs.get("type"),
             "name": attrs.get("name"),
             "space_type": attrs.get("space_type")
         }
     })
 
-# Export edges
+# -------------------------
+# Export edges with IDs + source/target
+# -------------------------
+edge_counter = 1
+
 for u, v, attrs in G.edges(data=True):
     features.append({
         "type": "Feature",
         "geometry": mapping(LineString([u, v])),
         "properties": {
             "feature_type": "edge",
+            "edge_id": edge_counter,
+            "source": node_id_map[u],
+            "target": node_id_map[v],
             "edge_type": attrs.get("edge_type"),
             "weight": attrs.get("weight")
         }
     })
+    edge_counter += 1
 
+# -------------------------
+# Final GeoJSON
+# -------------------------
 output = {
     "type": "FeatureCollection",
     "features": features
@@ -232,6 +257,16 @@ output = {
 with open("navigation_graph.geojson", "w") as f:
     json.dump(output, f, indent=2)
 
-print("navigation_graph.geojson exported")
+print("navigation_graph.geojson exported with IDs")
 print("Total Nodes:", len(G.nodes))
 print("Total Edges:", len(G.edges))
+
+
+# =========================
+# Check Graph Connectivity
+# =========================
+
+print("Is graph connected:", nx.is_connected(G))
+
+components = list(nx.connected_components(G))
+print("Connected components:", len(components))
