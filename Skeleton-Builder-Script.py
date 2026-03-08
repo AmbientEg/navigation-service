@@ -217,7 +217,7 @@ def check_connectivity(G):
 # =========================
 def main():
     G = nx.Graph()
-    data = load_geojson("floor3.geojson")
+    data = load_geojson("floor3_updated.geojson")
     corridor_lines, doors, rooms, walls = classify_features(data)
     build_corridor_backbone(G, corridor_lines)
     attach_doors(G, doors, corridor_lines)
