@@ -1,0 +1,1151 @@
+{
+  "type": "FeatureCollection",
+  "name": "floor3_utm",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:EPSG::32636"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 1,
+        "uid": "hall-35",
+        "name": "hall-35",
+        "label": "Lecture Hall 35",
+        "space_type": "lecture_hall",
+        "category": "education",
+        "floor": 3,
+        "walkable": false,
+        "height": 4.0,
+        "color": "#4CAF50",
+        "opacity": 0.7,
+        "icon": null,
+        "poi": 0.0,
+        "editable": 1.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326550.6275914417,
+              3323212.2963620177
+            ],
+            [
+              326547.7996168422,
+              3323224.4435256524
+            ],
+            [
+              326555.7797583258,
+              3323226.576163912
+            ],
+            [
+              326558.60696786764,
+              3323214.4360517296
+            ],
+            [
+              326550.6275914417,
+              3323212.2963620177
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 2,
+        "uid": "toilet-boys",
+        "name": "toilet-boys",
+        "label": "Boys Toilet",
+        "space_type": "toilet",
+        "category": "service",
+        "floor": 3,
+        "walkable": false,
+        "height": 3.0,
+        "color": "#03A9F4",
+        "opacity": 0.7,
+        "icon": "toilet",
+        "poi": 1.0,
+        "editable": 1.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326560.8306598994,
+              3323220.4093824346
+            ],
+            [
+              326562.02092494944,
+              3323215.3390850844
+            ],
+            [
+              326558.60696786764,
+              3323214.4360517296
+            ],
+            [
+              326557.4288570661,
+              3323219.4948866023
+            ],
+            [
+              326560.8306598994,
+              3323220.4093824346
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 3,
+        "uid": "office-34",
+        "name": "office-34",
+        "label": "Office 34",
+        "space_type": "office",
+        "category": "service",
+        "floor": 3,
+        "walkable": false,
+        "height": 3.0,
+        "color": "#FFC107",
+        "opacity": 0.7,
+        "icon": null,
+        "poi": 0.0,
+        "editable": 1.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326555.7797583258,
+              3323226.576163912
+            ],
+            [
+              326559.6824394487,
+              3323227.637585524
+            ],
+            [
+              326560.8609137066,
+              3323222.6044077077
+            ],
+            [
+              326556.95386680966,
+              3323221.535022467
+            ],
+            [
+              326555.7797583258,
+              3323226.576163912
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 4,
+        "uid": "lab-33",
+        "name": "lab-33",
+        "label": "Lab 33",
+        "space_type": "lab",
+        "category": "work",
+        "floor": 3,
+        "walkable": false,
+        "height": 3.5,
+        "color": "#9C27B0",
+        "opacity": 0.75,
+        "icon": "lab",
+        "poi": 1.0,
+        "editable": 1.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326560.3426558565,
+              3323227.8101053443
+            ],
+            [
+              326561.50079547614,
+              3323222.7763679405
+            ],
+            [
+              326569.1968797252,
+              3323224.8290666463
+            ],
+            [
+              326568.000082827,
+              3323229.877478334
+            ],
+            [
+              326560.3426558565,
+              3323227.8101053443
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 5,
+        "uid": "office-30",
+        "name": "office-30",
+        "label": "Office 30",
+        "space_type": "office",
+        "category": "service",
+        "floor": 3,
+        "walkable": false,
+        "height": 3.0,
+        "color": "#FFC107",
+        "opacity": 0.7,
+        "icon": null,
+        "poi": 0.0,
+        "editable": 1.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326568.000082827,
+              3323229.877478334
+            ],
+            [
+              326569.87089768815,
+              3323230.3791790875
+            ],
+            [
+              326571.0553812551,
+              3323225.3344785855
+            ],
+            [
+              326569.1968797252,
+              3323224.8290666463
+            ],
+            [
+              326568.000082827,
+              3323229.877478334
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 6,
+        "uid": "toilet-girls",
+        "name": "toilet-girls",
+        "label": "Girls Toilet",
+        "space_type": "toilet",
+        "category": "service",
+        "floor": 3,
+        "walkable": false,
+        "height": 3.0,
+        "color": "#E91E63",
+        "opacity": 0.7,
+        "icon": "toilet",
+        "poi": 1.0,
+        "editable": 1.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326571.0553812551,
+              3323225.3344785855
+            ],
+            [
+              326573.4564071246,
+              3323225.963533168
+            ],
+            [
+              326572.27947695006,
+              3323231.021911263
+            ],
+            [
+              326569.87089768815,
+              3323230.3791790875
+            ],
+            [
+              326571.0553812551,
+              3323225.3344785855
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 7,
+        "uid": "hall-32",
+        "name": "hall-32",
+        "label": "Lecture Hall 32",
+        "space_type": "lecture_hall",
+        "category": "education",
+        "floor": 3,
+        "walkable": false,
+        "height": 4.0,
+        "color": "#4CAF50",
+        "opacity": 0.7,
+        "icon": null,
+        "poi": 0.0,
+        "editable": 1.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326583.1034758089,
+              3323221.004535487
+            ],
+            [
+              326575.10984997184,
+              3323218.8571405057
+            ],
+            [
+              326573.935786054,
+              3323223.9031917476
+            ],
+            [
+              326573.4564071246,
+              3323225.963533168
+            ],
+            [
+              326572.27947695006,
+              3323231.021911263
+            ],
+            [
+              326580.26667532115,
+              3323233.154454082
+            ],
+            [
+              326583.1034758089,
+              3323221.004535487
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 8,
+        "uid": "lab-31",
+        "name": "lab-31",
+        "label": "Lab 31",
+        "space_type": "lab",
+        "category": "work",
+        "floor": 3,
+        "walkable": false,
+        "height": 3.5,
+        "color": "#9C27B0",
+        "opacity": 0.75,
+        "icon": "lab",
+        "poi": 1.0,
+        "editable": 1.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326567.22882914386,
+              3323216.733480978
+            ],
+            [
+              326566.0781963931,
+              3323221.795239956
+            ],
+            [
+              326573.935786054,
+              3323223.9031917476
+            ],
+            [
+              326575.10984997184,
+              3323218.8571405057
+            ],
+            [
+              326567.22882914386,
+              3323216.733480978
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 9,
+        "uid": "elevator",
+        "name": "elevator",
+        "label": "Elevator",
+        "space_type": "elevator",
+        "category": "service",
+        "floor": 3,
+        "walkable": false,
+        "height": 3.0,
+        "color": "#607D8B",
+        "opacity": 0.7,
+        "icon": "elevator",
+        "poi": 1.0,
+        "editable": 0.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326565.2417607523,
+              3323217.782937699
+            ],
+            [
+              326562.6784775652,
+              3323217.0810859003
+            ],
+            [
+              326562.188362784,
+              3323219.185044681
+            ],
+            [
+              326564.7618610539,
+              3323219.8621152136
+            ],
+            [
+              326565.2417607523,
+              3323217.782937699
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 10,
+        "uid": "stairs",
+        "name": "stairs",
+        "label": "Stairs",
+        "space_type": "stairs",
+        "category": "circulation",
+        "floor": 3,
+        "walkable": false,
+        "height": 3.0,
+        "color": "#795548",
+        "opacity": 0.7,
+        "icon": "stairs",
+        "poi": 1.0,
+        "editable": 0.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326564.7618610539,
+              3323219.8621152136
+            ],
+            [
+              326564.4035509458,
+              3323221.3555250843
+            ],
+            [
+              326560.8306598994,
+              3323220.4093824346
+            ],
+            [
+              326562.02092494944,
+              3323215.3390850844
+            ],
+            [
+              326565.5879918389,
+              3323216.3081825613
+            ],
+            [
+              326565.2417607523,
+              3323217.782937699
+            ],
+            [
+              326562.6784775652,
+              3323217.0810859003
+            ],
+            [
+              326562.188362784,
+              3323219.185044681
+            ],
+            [
+              326564.7618610539,
+              3323219.8621152136
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 11,
+        "uid": "wall-1",
+        "name": "wall",
+        "label": "Wall",
+        "space_type": "wall",
+        "category": "obstacle",
+        "floor": 3,
+        "walkable": false,
+        "height": 4.0,
+        "color": "#424242",
+        "opacity": 0.9,
+        "icon": null,
+        "poi": 0.0,
+        "editable": 0.0,
+        "selectable": 0.0,
+        "width": null,
+        "routing_cost": 999
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326561.50079547614,
+              3323222.7763679386
+            ],
+            [
+              326560.8609137066,
+              3323222.6044077077
+            ],
+            [
+              326559.6824394487,
+              3323227.637585524
+            ],
+            [
+              326560.3426558565,
+              3323227.8101053443
+            ],
+            [
+              326561.50079547614,
+              3323222.7763679386
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 12,
+        "uid": "wall-2",
+        "name": "wall",
+        "label": "Wall",
+        "space_type": "wall",
+        "category": "obstacle",
+        "floor": 3,
+        "walkable": false,
+        "height": 4.0,
+        "color": "#424242",
+        "opacity": 0.9,
+        "icon": null,
+        "poi": 0.0,
+        "editable": 0.0,
+        "selectable": 0.0,
+        "width": null,
+        "routing_cost": 999
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              326566.0781963931,
+              3323221.795239956
+            ],
+            [
+              326565.7045605335,
+              3323221.701750084
+            ],
+            [
+              326566.8977681604,
+              3323216.6498736306
+            ],
+            [
+              326567.22882914386,
+              3323216.733480978
+            ],
+            [
+              326566.0781963931,
+              3323221.795239956
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 13,
+        "uid": "corridor_L0_L1",
+        "name": "corridor",
+        "label": "Main Corridor",
+        "space_type": "corridor",
+        "category": "circulation",
+        "floor": 3,
+        "walkable": true,
+        "height": 5.6,
+        "color": "#BDBDBD",
+        "opacity": 0.5,
+        "icon": null,
+        "poi": 0.0,
+        "editable": 1.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 1,
+        "geometry_type": "centerline"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326557.19136193756,
+            3323220.5149545344
+          ],
+          [
+            326573.696096589,
+            3323224.933362458
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 13,
+        "uid": "corridor_L0_L1",
+        "name": "corridor",
+        "label": "Main Corridor",
+        "space_type": "corridor",
+        "category": "circulation",
+        "floor": 3,
+        "walkable": true,
+        "height": 5.6,
+        "color": "#BDBDBD",
+        "opacity": 0.5,
+        "icon": null,
+        "poi": 0.0,
+        "editable": 1.0,
+        "selectable": 1.0,
+        "width": null,
+        "routing_cost": 1,
+        "geometry_type": "centerline"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326566.2428799997,
+            3323216.479028096
+          ],
+          [
+            326564.6293853197,
+            3323222.506154159
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 14,
+        "uid": null,
+        "name": "door-hall-32",
+        "label": null,
+        "space_type": "door",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": null,
+        "editable": null,
+        "selectable": null,
+        "width": 1.2,
+        "routing_cost": 1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326573.45780944754,
+            3323225.9596279673
+          ],
+          [
+            326573.9371506331,
+            3323223.896922267
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 15,
+        "uid": null,
+        "name": "door-lab-31-1",
+        "label": null,
+        "space_type": "door",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": null,
+        "editable": null,
+        "selectable": null,
+        "width": 1.2,
+        "routing_cost": 1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326572.9714014886,
+            3323223.6494977665
+          ],
+          [
+            326573.9379721335,
+            3323223.899196542
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 16,
+        "uid": null,
+        "name": "door-toilet-girls",
+        "label": null,
+        "space_type": "door",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": null,
+        "editable": null,
+        "selectable": null,
+        "width": 1.2,
+        "routing_cost": 1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326571.07985770225,
+            3323225.3469250724
+          ],
+          [
+            326571.77240042103,
+            3323225.5341682527
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 17,
+        "uid": null,
+        "name": "door-office",
+        "label": null,
+        "space_type": "door",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": null,
+        "editable": null,
+        "selectable": null,
+        "width": 1.2,
+        "routing_cost": 1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326569.5607599359,
+            3323224.946384245
+          ],
+          [
+            326570.3719556038,
+            3323225.1721241917
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 18,
+        "uid": null,
+        "name": "door-lab-31-2",
+        "label": null,
+        "space_type": "door",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": null,
+        "editable": null,
+        "selectable": null,
+        "width": 1.2,
+        "routing_cost": 1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326566.1422670815,
+            3323221.812536286
+          ],
+          [
+            326567.1878397481,
+            3323222.092793918
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 19,
+        "uid": null,
+        "name": "door-lab-33-1",
+        "label": null,
+        "space_type": "door",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": null,
+        "editable": null,
+        "selectable": null,
+        "width": 1.2,
+        "routing_cost": 1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326568.16773724917,
+            3323224.554572275
+          ],
+          [
+            326569.1725412952,
+            3323224.812116874
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 20,
+        "uid": null,
+        "name": "door-lab-33-2",
+        "label": null,
+        "space_type": "door",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": null,
+        "editable": null,
+        "selectable": null,
+        "width": 1.2,
+        "routing_cost": 1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326561.53359512036,
+            3323222.7840515207
+          ],
+          [
+            326562.53016692423,
+            3323223.05417816
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 22,
+        "uid": null,
+        "name": "elevator",
+        "label": null,
+        "space_type": "elevator",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": null,
+        "editable": null,
+        "selectable": null,
+        "width": 1.2,
+        "routing_cost": 10
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326564.84223094373,
+            3323219.3658959167
+          ],
+          [
+            326565.02703444776,
+            3323218.562942162
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 23,
+        "uid": null,
+        "name": "stairs-up-door",
+        "label": null,
+        "space_type": "entrance",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": 0.0,
+        "editable": 0.0,
+        "selectable": 0.0,
+        "width": 1.2,
+        "routing_cost": 10
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326564.4018520508,
+            3323221.290965761
+          ],
+          [
+            326564.73675473785,
+            3323219.8403170374
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 24,
+        "uid": null,
+        "name": "stairs-down-door",
+        "label": null,
+        "space_type": "stairs",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": 0.0,
+        "editable": 0.0,
+        "selectable": 0.0,
+        "width": 1.2,
+        "routing_cost": 10
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326565.2077167856,
+            3323217.779117469
+          ],
+          [
+            326565.55988701776,
+            3323216.3308058614
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 25,
+        "uid": null,
+        "name": "door-toilet-boys",
+        "label": null,
+        "space_type": "door",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": null,
+        "editable": null,
+        "selectable": null,
+        "width": 1.2,
+        "routing_cost": 1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326560.0453238038,
+            3323220.200759746
+          ],
+          [
+            326560.8099035189,
+            3323220.395598488
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 26,
+        "uid": null,
+        "name": "door-hall-35",
+        "label": null,
+        "space_type": "door",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": null,
+        "editable": null,
+        "selectable": null,
+        "width": 1.2,
+        "routing_cost": 1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326556.9552901373,
+            3323221.542375536
+          ],
+          [
+            326557.4266965054,
+            3323219.4918006263
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 27,
+        "uid": null,
+        "name": "door-office-34",
+        "label": null,
+        "space_type": "door",
+        "category": null,
+        "floor": 3,
+        "walkable": true,
+        "height": null,
+        "color": null,
+        "opacity": null,
+        "icon": null,
+        "poi": null,
+        "editable": null,
+        "selectable": null,
+        "width": 1.2,
+        "routing_cost": 1
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            326560.8448706634,
+            3323222.6001754873
+          ],
+          [
+            326559.8696145937,
+            3323222.332043445
+          ]
+        ]
+      }
+    }
+  ]
+}

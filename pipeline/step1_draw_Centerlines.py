@@ -158,8 +158,8 @@ class CenterLineDrawer:
 # =========================
 def main():
     # Load your file
-    input_filename = "floor3.geojson"
-    output_filename = "floor3_updated.geojson"
+    input_filename = "floor3_utm.geojson"
+    output_filename = "floor3_centerlines.geojson"
 
     try:
         with open(input_filename, "r") as f:

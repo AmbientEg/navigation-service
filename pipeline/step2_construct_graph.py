@@ -82,16 +82,50 @@ def add_junctions(G):
 # =========================
 # ATTACH DOORS
 # =========================
-def attach_doors(G, doors, corridor_lines):
-    corridor_geoms = [line for line, _ in corridor_lines]
+def attach_doors(G, doors):
     for door_geom, props in doors:
+        corridor_edges = [
+            (u, v) for u, v, d in G.edges(data=True)
+            if d.get("edge_type") == "corridor"
+        ]
+
         mid = door_geom.interpolate(0.5, normalized=True)
-        nearest_line = min(corridor_geoms, key=lambda l: l.distance(mid))
-        proj = nearest_line.interpolate(nearest_line.project(mid))
-        proj_coord = snap((proj.x, proj.y))
         door_coord = snap((mid.x, mid.y))
+
+        best_edge = None
+        best_proj = None
+        best_dist = float("inf")
+
+        for u, v in corridor_edges:
+            line = LineString([u, v])
+            proj_dist = line.project(mid)
+            proj_point = line.interpolate(proj_dist)
+            dist = proj_point.distance(mid)
+
+            if dist < best_dist:
+                best_dist = dist
+                best_proj = proj_point
+                best_edge = (u, v)
+
+        if best_edge is None:
+            continue
+
+        proj_coord = snap((best_proj.x, best_proj.y))
+        u, v = best_edge
+
+        if G.has_edge(u, v):
+            G.remove_edge(u, v)
+            G.add_node(proj_coord, type="corridor")
+            G.add_edge(u, proj_coord, weight=Point(u).distance(Point(proj_coord)), edge_type="corridor")
+            G.add_edge(proj_coord, v, weight=Point(proj_coord).distance(Point(v)), edge_type="corridor")
+
         G.add_node(door_coord, type="door", name=props.get("name"))
-        G.add_edge(proj_coord, door_coord, weight=proj.distance(mid), edge_type="door")
+        G.add_edge(
+            proj_coord,
+            door_coord,
+            weight=Point(proj_coord).distance(Point(door_coord)),
+            edge_type="door"
+        )
 
 # =========================
 # ATTACH ROOMS
@@ -297,18 +331,48 @@ def export_graph(G, output_file):
         json.dump(geojson, f, indent=2)
 
 # =========================
+# clean up graph by removing self-loops and zero-length edges
+# =========================
+
+def remove_self_loops(G):
+    loops = list(nx.selfloop_edges(G))
+
+    if loops:
+        print(f"\nRemoving {len(loops)} self-loop edges")
+        for u, v in loops:
+            print(f"  Removing loop at {u}")
+
+        G.remove_edges_from(loops)
+
+
+def remove_zero_length_edges(G, threshold=1e-9):
+    to_remove = []
+
+    for u, v, d in G.edges(data=True):
+        if d.get("weight", 0) < threshold:
+            to_remove.append((u, v))
+
+    if to_remove:
+        print(f"Removing {len(to_remove)} zero-length edges")
+        G.remove_edges_from(to_remove)
+
+# =========================
 # MAIN
 # =========================
 def main():
     G = nx.Graph()
-    data = load_geojson("floor3_updated.geojson")
+    data = load_geojson("floor3_centerlines.geojson")
     corridor_lines, doors, rooms, walls = classify_features(data)
     build_corridor_backbone(G, corridor_lines)
     add_junctions(G)
-    attach_doors(G, doors, corridor_lines)
+    attach_doors(G, doors)
     attach_rooms(G, rooms)
+    remove_self_loops(G)
+    remove_zero_length_edges(G)
     check_connectivity(G)
     visualize_graph(G)
+
+    export_graph(G, "navigation_graph_export.geojson")
 
 if __name__ == "__main__":
     main()

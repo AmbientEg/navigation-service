@@ -226,5 +226,10 @@ def main():
     export_graph(G)
     check_connectivity(G)
 
+    nx.draw(G, with_labels=True)
+    import matplotlib.pyplot as plt
+    plt.show()
+
+
 if __name__ == "__main__":
     main()
