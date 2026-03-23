@@ -15,7 +15,7 @@ from models import Base
 from database import db_manager
 
 # Routes
-from routes import buildings_routes, floors_routes, navigation_routes
+from routes import navigation_routes, admin_routes
 
 # ----------------------------------------------------
 # Production Logging Configuration
@@ -375,9 +375,8 @@ async def submit_feedback(feedback: dict):
 # ----------------------------------------------------
 # Routers
 # ----------------------------------------------------
-app.include_router(buildings_routes.router, prefix="/api/buildings", tags=["Buildings"])
-app.include_router(floors_routes.router, prefix="/api/floors", tags=["Floors"])
 app.include_router(navigation_routes.router, prefix="/api/navigation", tags=["Navigation"])
+app.include_router(admin_routes.router, prefix="/api/admin", tags=["Admin"])
 
 
 # ----------------------------------------------------

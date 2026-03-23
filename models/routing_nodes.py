@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import ForeignKey, Index
+from sqlalchemy import ForeignKey, Index, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from geoalchemy2 import Geometry
@@ -37,6 +37,9 @@ class RoutingNode(Base, TimestampMixin):
     geometry: Mapped[bytes] = mapped_column(
         Geometry("POINT", srid=4326, spatial_index=True)
     )
+
+    # Optional label (room name, door name, etc.)
+    name: Mapped[str | None] = mapped_column(String(255))
 
     # Relationships
     floor: Mapped["Floor"] = relationship("Floor", back_populates="routing_nodes")
