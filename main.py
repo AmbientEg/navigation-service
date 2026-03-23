@@ -15,7 +15,8 @@ from models import Base
 from database import db_manager
 
 # Routes
-from routes import navigation_routes, admin_routes
+import routes.navigation_routes as navigation_routes
+import routes.admin_routes as admin_routes
 
 # ----------------------------------------------------
 # Production Logging Configuration

@@ -90,8 +90,12 @@ async def _get_or_create_building(
     building_description: str | None,
     floor_geojson: dict[str, Any],
 ) -> Building:
-    existing = await db.execute(select(Building).where(Building.name == building_name))
-    building = existing.scalar_one_or_none()
+    existing = await db.execute(
+        select(Building)
+        .where(Building.name == building_name)
+        .order_by(Building.updated_at.desc())
+    )
+    building = existing.scalars().first()
 
     geometry_wkt = _build_building_footprint_wkt(floor_geojson)
 
@@ -210,6 +214,27 @@ def _poi_geom_from_feature(geom):
     return geom
 
 
+def _normalize_space_type(raw_space_type: str, geom_type: str) -> str:
+    """Normalize GeoJSON space type for DB storage while preserving source type."""
+    st = (raw_space_type or "").lower().strip()
+    return st or "poi"
+
+
+def _is_truthy_poi(value: Any) -> bool:
+    if value is True:
+        return True
+    if isinstance(value, (int, float)):
+        return value != 0
+    if isinstance(value, str):
+        return value.strip().lower() in {"true", "1", "yes"}
+    return False
+
+
+def _is_poi_candidate(space_type: str, geom_type: str, props: dict[str, Any]) -> bool:
+    # Persist only explicit POIs from source map.
+    return _is_truthy_poi(props.get("poi"))
+
+
 async def persist_pipeline_output(
     db: AsyncSession,
     graph_geojson_path: str,
@@ -316,28 +341,30 @@ async def persist_pipeline_output(
         )
         inserted_edges += 1
 
-    # 3) POIS (rooms, stairs, elevator, entrance + marked POIs)
+    # 3) POIS (only features explicitly flagged with poi=true/truthy)
     inserted_pois = 0
-    allowed_poi_types = {"room", "stairs", "elevator", "entrance", "poi"}
 
     for idx, feature in enumerate(floor_geojson.get("features", []), start=1):
         props = feature.get("properties", {})
-        space_type = (props.get("space_type") or "").lower()
-        if space_type not in allowed_poi_types:
-            continue
-
         geometry = feature.get("geometry")
         if not geometry:
             continue
+
+        geom_type = geometry.get("type", "")
+        space_type = (props.get("space_type") or "").lower()
+        if not _is_poi_candidate(space_type, geom_type, props):
+            continue
+
         geom_obj = shape(geometry)
         poi_point = _poi_geom_from_feature(geom_obj)
-        poi_name = props.get("name") or f"{space_type}_{idx}"
+        normalized_type = _normalize_space_type(space_type, geom_obj.geom_type)
+        poi_name = props.get("name") or props.get("label") or f"{normalized_type}_{idx}"
 
         db.add(
             POI(
                 floor_id=floor.id,
                 name=poi_name,
-                type=space_type,
+                type=normalized_type,
                 geometry=WKTElement(poi_point.wkt, srid=4326),
                 extra_data=props,
             )

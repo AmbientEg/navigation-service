@@ -23,7 +23,7 @@
         "color": "#4CAF50",
         "opacity": 0.7,
         "icon": null,
-        "poi": false,
+        "poi": true,
         "editable": true,
         "selectable": true,
         "routing_cost": 0
@@ -119,7 +119,7 @@
         "color": "#FFC107",
         "opacity": 0.7,
         "icon": null,
-        "poi": false,
+        "poi": true,
         "editable": true,
         "selectable": true,
         "routing_cost": 0
@@ -215,7 +215,7 @@
         "color": "#FFC107",
         "opacity": 0.7,
         "icon": null,
-        "poi": false,
+        "poi": true,
         "editable": true,
         "selectable": true,
         "routing_cost": 0
@@ -311,7 +311,7 @@
         "color": "#4CAF50",
         "opacity": 0.7,
         "icon": null,
-        "poi": false,
+        "poi": true,
         "editable": true,
         "selectable": true,
         "routing_cost": 0
@@ -463,7 +463,7 @@
         "color": "#795548",
         "opacity": 0.7,
         "icon": "stairs",
-        "poi": true,
+        "poi": false,
         "editable": false,
         "selectable": true,
         "routing_cost": 0
@@ -672,18 +672,18 @@
         ]
       }
     },
-    { "type": "Feature", "properties": { "fid": 14, "uid": null, "name": "door-hall-32", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": null, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201506323914675, 30.02777979402078 ], [ 31.201511628783631, 30.027761256127071 ] ] } },
-    { "type": "Feature", "properties": { "fid": 15, "uid": null, "name": "door-lab-31-1", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": null, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201501658057563, 30.027758887450485 ], [ 31.201511636928927, 30.027761276757712 ] ] } },
-    { "type": "Feature", "properties": { "fid": 16, "uid": null, "name": "door-toilet-girls", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": null, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201481773686055, 30.027773930331985 ], [ 31.201488922137138, 30.027775717444754 ] ] } },
-    { "type": "Feature", "properties": { "fid": 17, "uid": null, "name": "door-office", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": null, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201466091846772, 30.027770102096543 ], [ 31.201474463992067, 30.027772253272765 ] ] } },
-    { "type": "Feature", "properties": { "fid": 18, "uid": null, "name": "door-lab-31-2", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": null, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201431165968536, 30.027741349908005 ], [ 31.20144195879913, 30.027744026062425 ] ] } },
-    { "type": "Feature", "properties": { "fid": 19, "uid": null, "name": "door-lab-33-1", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": null, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.20145171549067, 30.027766370464306 ], [ 31.201462089413685, 30.027768835964658 ] ] } },
-    { "type": "Feature", "properties": { "fid": 20, "uid": null, "name": "door-lab-33-2", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": null, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201383233887903, 30.027749459836947 ], [ 31.201393520421622, 30.027752037667081 ] ] } },
-    { "type": "Feature", "properties": { "fid": 22, "uid": null, "name": "elevator", "label": null, "space_type": "elevator", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": null, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 10 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201418088238533, 30.027719096674179 ], [ 31.201420134719125, 30.027711880137353 ] ] } },
-    { "type": "Feature", "properties": { "fid": 23, "uid": null, "name": "stairs-up-door", "label": null, "space_type": "entrance", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": false, "selectable": false, "width": 1.2, "routing_cost": 10 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201413209660803, 30.02773639859566 ], [ 31.201416917585366, 30.027723361054459 ] ] } },
-    { "type": "Feature", "properties": { "fid": 24, "uid": null, "name": "stairs-down-door", "label": null, "space_type": "stairs", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": false, "selectable": false, "width": 1.2, "routing_cost": 10 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201422135363149, 30.027704835562588 ], [ 31.201426021900982, 30.027691821549546 ] ] } },
-    { "type": "Feature", "properties": { "fid": 25, "uid": null, "name": "door-toilet-boys", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": null, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201368227168846, 30.027725947306635 ], [ 31.201376121117452, 30.027727813149035 ] ] } },
-    { "type": "Feature", "properties": { "fid": 26, "uid": null, "name": "door-hall-35", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": null, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201335977114738, 30.027737610825437 ], [ 31.201341197783414, 30.027719181236016 ] ] } },
-    { "type": "Feature", "properties": { "fid": 27, "uid": null, "name": "door-office-34", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": null, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201376124472777, 30.027747703631846 ], [ 31.201366058575552, 30.027745146813317 ] ] } }
+    { "type": "Feature", "properties": { "fid": 14, "uid": null, "name": "door-hall-32", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201506323914675, 30.02777979402078 ], [ 31.201511628783631, 30.027761256127071 ] ] } },
+    { "type": "Feature", "properties": { "fid": 15, "uid": null, "name": "door-lab-31-1", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201501658057563, 30.027758887450485 ], [ 31.201511636928927, 30.027761276757712 ] ] } },
+    { "type": "Feature", "properties": { "fid": 16, "uid": null, "name": "door-toilet-girls", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201481773686055, 30.027773930331985 ], [ 31.201488922137138, 30.027775717444754 ] ] } },
+    { "type": "Feature", "properties": { "fid": 17, "uid": null, "name": "door-office", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201466091846772, 30.027770102096543 ], [ 31.201474463992067, 30.027772253272765 ] ] } },
+    { "type": "Feature", "properties": { "fid": 18, "uid": null, "name": "door-lab-31-2", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201431165968536, 30.027741349908005 ], [ 31.20144195879913, 30.027744026062425 ] ] } },
+    { "type": "Feature", "properties": { "fid": 19, "uid": null, "name": "door-lab-33-1", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.20145171549067, 30.027766370464306 ], [ 31.201462089413685, 30.027768835964658 ] ] } },
+    { "type": "Feature", "properties": { "fid": 20, "uid": null, "name": "door-lab-33-2", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201383233887903, 30.027749459836947 ], [ 31.201393520421622, 30.027752037667081 ] ] } },
+    { "type": "Feature", "properties": { "fid": 22, "uid": null, "name": "elevator", "label": null, "space_type": "elevator", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 10 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201418088238533, 30.027719096674179 ], [ 31.201420134719125, 30.027711880137353 ] ] } },
+    { "type": "Feature", "properties": { "fid": 23, "uid": null, "name": "stairs-up-door", "label": null, "space_type": "stairs", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": true, "editable": false, "selectable": false, "width": 1.2, "routing_cost": 10 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201413209660803, 30.02773639859566 ], [ 31.201416917585366, 30.027723361054459 ] ] } },
+    { "type": "Feature", "properties": { "fid": 24, "uid": null, "name": "stairs-down-door", "label": null, "space_type": "stairs", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": true, "editable": false, "selectable": false, "width": 1.2, "routing_cost": 10 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201422135363149, 30.027704835562588 ], [ 31.201426021900982, 30.027691821549546 ] ] } },
+    { "type": "Feature", "properties": { "fid": 25, "uid": null, "name": "door-toilet-boys", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201368227168846, 30.027725947306635 ], [ 31.201376121117452, 30.027727813149035 ] ] } },
+    { "type": "Feature", "properties": { "fid": 26, "uid": null, "name": "door-hall-35", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201335977114738, 30.027737610825437 ], [ 31.201341197783414, 30.027719181236016 ] ] } },
+    { "type": "Feature", "properties": { "fid": 27, "uid": null, "name": "door-office-34", "label": null, "space_type": "door", "category": null, "floor": 3, "walkable": true, "height": null, "color": null, "opacity": null, "icon": null, "poi": false, "editable": null, "selectable": null, "width": 1.2, "routing_cost": 1 }, "geometry": { "type": "LineString", "coordinates": [ [ 31.201376124472777, 30.027747703631846 ], [ 31.201366058575552, 30.027745146813317 ] ] } }
   ]
 }
