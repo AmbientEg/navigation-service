@@ -1,4 +1,5 @@
 import json
+import logging
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +16,9 @@ from models.edge_types import EdgeType
 from models.routing_nodes import RoutingNode
 from models.routing_edges import RoutingEdge
 from models.poi import POI
+from services.crs_service import normalize_point_for_db, validate_wgs84_coordinates, looks_like_utm
+
+logger = logging.getLogger(__name__)
 
 
 DEFAULT_NODE_TYPES = [
@@ -48,6 +52,12 @@ def _load_json(path: str) -> dict[str, Any]:
 
 
 def _point_wkt_from_xy(x: float, y: float) -> str:
+    """
+    Create a WKT POINT string from x, y coordinates.
+    
+    Coordinates should already be normalized to WGS84 before calling this function.
+    See normalize_point_for_db() for CRS normalization.
+    """
     return f"POINT({x} {y})"
 
 
@@ -281,10 +291,34 @@ async def persist_pipeline_output(
     for geometry, props in graph_nodes:
         coords = geometry.get("coordinates", [None, None])
         if coords[0] is None or coords[1] is None:
+            logger.warning(f"Skipping node with missing coordinates: {props}")
             continue
 
         x, y = float(coords[0]), float(coords[1])
-        key = (floor.id, round(x, 8), round(y, 8))
+        
+        # ===== CRS NORMALIZATION: Detect and convert to WGS84 if needed =====
+        # Pipeline typically outputs UTM coordinates (x > 180 or |y| > 90 suggests UTM).
+        # DB stores all geometries in WGS84 (EPSG:4326).
+        source_crs = "UTM" if looks_like_utm(x, y) else "WGS84"
+        try:
+            x_normalized, y_normalized = normalize_point_for_db(
+                x, y,
+                source_crs=source_crs,
+                target_crs="WGS84"
+            )
+        except ValueError as e:
+            logger.error(f"Failed to normalize node coordinates ({x}, {y}): {e}. Skipping node.")
+            continue
+        
+        # Validate final WGS84 coordinates
+        if not validate_wgs84_coordinates(x_normalized, y_normalized):
+            logger.error(
+                f"Node coordinates {(x_normalized, y_normalized)} outside WGS84 range after normalization. Skipping."
+            )
+            continue
+        
+        # ===== Deduplication by rounded coordinates =====
+        key = (floor.id, round(x_normalized, 8), round(y_normalized, 8))
 
         if key in dedupe_by_coord:
             db_node = dedupe_by_coord[key]
@@ -292,10 +326,11 @@ async def persist_pipeline_output(
             node_type_code = (props.get("node_type") or "unknown").lower()
             node_type_id = node_type_map.get(node_type_code, node_type_map["unknown"])
 
+            # Create node with normalized WGS84 coordinates and explicit SRID=4326
             db_node = RoutingNode(
                 floor_id=floor.id,
                 node_type_id=node_type_id,
-                geometry=WKTElement(_point_wkt_from_xy(x, y), srid=4326),
+                geometry=WKTElement(_point_wkt_from_xy(x_normalized, y_normalized), srid=4326),
                 name=props.get("name"),
             )
             db.add(db_node)
@@ -360,12 +395,37 @@ async def persist_pipeline_output(
         normalized_type = _normalize_space_type(space_type, geom_obj.geom_type)
         poi_name = props.get("name") or props.get("label") or f"{normalized_type}_{idx}"
 
+        # ===== CRS NORMALIZATION: Detect and convert POI coordinates to WGS84 =====
+        # POI geometry is extracted as a centroid or interpolated point.
+        # Ensure it's normalized to WGS84 before persisting.
+        x_poi, y_poi = poi_point.x, poi_point.y
+        source_crs = "UTM" if looks_like_utm(x_poi, y_poi) else "WGS84"
+        
+        try:
+            x_normalized, y_normalized = normalize_point_for_db(
+                x_poi, y_poi,
+                source_crs=source_crs,
+                target_crs="WGS84"
+            )
+        except ValueError as e:
+            logger.error(f"Failed to normalize POI '{poi_name}' coordinates ({x_poi}, {y_poi}): {e}. Skipping POI.")
+            continue
+        
+        # Validate final WGS84 coordinates
+        if not validate_wgs84_coordinates(x_normalized, y_normalized):
+            logger.error(
+                f"POI '{poi_name}' coordinates {(x_normalized, y_normalized)} outside WGS84 range after normalization. Skipping."
+            )
+            continue
+        
+        # Create POI with normalized WGS84 coordinates and explicit SRID=4326
+        poi_point_normalized = type(poi_point)(x_normalized, y_normalized)
         db.add(
             POI(
                 floor_id=floor.id,
                 name=poi_name,
                 type=normalized_type,
-                geometry=WKTElement(poi_point.wkt, srid=4326),
+                geometry=WKTElement(poi_point_normalized.wkt, srid=4326),
                 extra_data=props,
             )
         )
