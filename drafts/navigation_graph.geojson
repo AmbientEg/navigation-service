@@ -1,0 +1,1313 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20133859,
+          30.02772838
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 1,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20150896,
+          30.02777057
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 2,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20143308,
+          30.02769326
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 3,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20143308,
+          30.0277484
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 4,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20150898,
+          30.02777053
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 5,
+        "node_type": "door",
+        "name": "door-hall-32",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20150433,
+          30.02776942
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 6,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20150665,
+          30.02776008
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 7,
+        "node_type": "door",
+        "name": "door-lab-31-1",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20148771,
+          30.02776531
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 8,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20148535,
+          30.02777482
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 9,
+        "node_type": "door",
+        "name": "door-toilet-girls",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20147266,
+          30.02776158
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 10,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20147028,
+          30.02777118
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 11,
+        "node_type": "door",
+        "name": "door-office",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20143308,
+          30.02774269
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 12,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20143656,
+          30.02774269
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 13,
+        "node_type": "door",
+        "name": "door-lab-31-2",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20145922,
+          30.02775825
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 14,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.2014569,
+          30.0277676
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 15,
+        "node_type": "door",
+        "name": "door-lab-33-1",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20139072,
+          30.02774129
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 16,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20138838,
+          30.02775075
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 17,
+        "node_type": "door",
+        "name": "door-lab-33-2",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20136988,
+          30.02773613
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 18,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20137217,
+          30.02772688
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 19,
+        "node_type": "door",
+        "name": "door-toilet-boys",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20133859,
+          30.0277284
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 20,
+        "node_type": "door",
+        "name": "door-hall-35",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20137342,
+          30.027737
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 21,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20137109,
+          30.02774643
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 22,
+        "node_type": "door",
+        "name": "door-office-34",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20143308,
+          30.02771549
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 23,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20141911,
+          30.02771549
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 24,
+        "node_type": "door",
+        "name": "elevator",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20141099,
+          30.02774631
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 25,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20141506,
+          30.02772988
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 26,
+        "node_type": "door",
+        "name": "stairs-up-door",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20143308,
+          30.02769833
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 27,
+        "node_type": "corridor",
+        "name": null,
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20142408,
+          30.02769833
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 28,
+        "node_type": "door",
+        "name": "stairs-down-door",
+        "space_type": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20129742,
+          30.0277181
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 29,
+        "node_type": "room",
+        "name": "hall-35",
+        "space_type": "lecture_hall"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20136534,
+          30.02770081
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 30,
+        "node_type": "room",
+        "name": "toilet-boys",
+        "space_type": "toilet"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20134962,
+          30.02776527
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 31,
+        "node_type": "room",
+        "name": "office-34",
+        "space_type": "office"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20141614,
+          30.02778183
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 32,
+        "node_type": "room",
+        "name": "lab-33",
+        "space_type": "lab"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20146534,
+          30.0277941
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 33,
+        "node_type": "room",
+        "name": "office-30",
+        "space_type": "office"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20148738,
+          30.02779954
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 34,
+        "node_type": "room",
+        "name": "toilet-girls",
+        "space_type": "toilet"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20155018,
+          30.02778083
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 35,
+        "node_type": "room",
+        "name": "hall-32",
+        "space_type": "lecture_hall"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.20147749,
+          30.02772852
+        ]
+      },
+      "properties": {
+        "feature_type": "node",
+        "node_id": 36,
+        "node_type": "room",
+        "name": "lab-31",
+        "space_type": "lab"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20133859,
+            30.02772838
+          ],
+          [
+            31.20150896,
+            30.02777057
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 1,
+        "source": 1,
+        "target": 2,
+        "edge_type": "corridor",
+        "weight": 0.00017551619013967984
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20133859,
+            30.02772838
+          ],
+          [
+            31.20133859,
+            30.0277284
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 2,
+        "source": 1,
+        "target": 20,
+        "edge_type": "door",
+        "weight": 1.9631870618442887e-08
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20150896,
+            30.02777057
+          ],
+          [
+            31.20150898,
+            30.02777053
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 3,
+        "source": 2,
+        "target": 5,
+        "edge_type": "door",
+        "weight": 4.8144604368032505e-08
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20143308,
+            30.02769326
+          ],
+          [
+            31.20143308,
+            30.0277484
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 4,
+        "source": 3,
+        "target": 4,
+        "edge_type": "corridor",
+        "weight": 5.514000000061969e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20143308,
+            30.02769326
+          ],
+          [
+            31.20143308,
+            30.02774269
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 5,
+        "source": 3,
+        "target": 12,
+        "edge_type": "corridor",
+        "weight": 4.9430000000683094e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20143308,
+            30.02769326
+          ],
+          [
+            31.20143308,
+            30.02771549
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 6,
+        "source": 3,
+        "target": 23,
+        "edge_type": "corridor",
+        "weight": 2.222999999901276e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20143308,
+            30.02769326
+          ],
+          [
+            31.20143308,
+            30.02769833
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 7,
+        "source": 3,
+        "target": 27,
+        "edge_type": "corridor",
+        "weight": 5.070000000273467e-06
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20143308,
+            30.0277484
+          ],
+          [
+            31.20143308,
+            30.02774269
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 8,
+        "source": 4,
+        "target": 12,
+        "edge_type": "corridor",
+        "weight": 5.709999999936599e-06
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20143308,
+            30.0277484
+          ],
+          [
+            31.20143308,
+            30.02771549
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 9,
+        "source": 4,
+        "target": 23,
+        "edge_type": "corridor",
+        "weight": 3.291000000160693e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20143308,
+            30.0277484
+          ],
+          [
+            31.20143308,
+            30.02769833
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 10,
+        "source": 4,
+        "target": 27,
+        "edge_type": "corridor",
+        "weight": 5.0070000000346226e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20150898,
+            30.02777053
+          ],
+          [
+            31.20155018,
+            30.02778083
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 11,
+        "source": 5,
+        "target": 35,
+        "edge_type": "room_connection",
+        "weight": 4.246998759956992e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20150433,
+            30.02776942
+          ],
+          [
+            31.20150665,
+            30.02776008
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 12,
+        "source": 6,
+        "target": 7,
+        "edge_type": "door",
+        "weight": 9.62486857265005e-06
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20150665,
+            30.02776008
+          ],
+          [
+            31.20147749,
+            30.02772852
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 13,
+        "source": 7,
+        "target": 36,
+        "edge_type": "room_connection",
+        "weight": 4.296941815330383e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20148771,
+            30.02776531
+          ],
+          [
+            31.20148535,
+            30.02777482
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 14,
+        "source": 8,
+        "target": 9,
+        "edge_type": "door",
+        "weight": 9.804987203539147e-06
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20148535,
+            30.02777482
+          ],
+          [
+            31.20148738,
+            30.02779954
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 15,
+        "source": 9,
+        "target": 34,
+        "edge_type": "room_connection",
+        "weight": 2.4801463207956748e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20147266,
+            30.02776158
+          ],
+          [
+            31.20147028,
+            30.02777118
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 16,
+        "source": 10,
+        "target": 11,
+        "edge_type": "door",
+        "weight": 9.888512222342748e-06
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20147028,
+            30.02777118
+          ],
+          [
+            31.20146534,
+            30.0277941
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 17,
+        "source": 11,
+        "target": 33,
+        "edge_type": "room_connection",
+        "weight": 2.344691621361807e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20143308,
+            30.02774269
+          ],
+          [
+            31.20143656,
+            30.02774269
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 18,
+        "source": 12,
+        "target": 13,
+        "edge_type": "door",
+        "weight": 3.4846757017703567e-06
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20145922,
+            30.02775825
+          ],
+          [
+            31.2014569,
+            30.0277676
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 19,
+        "source": 14,
+        "target": 15,
+        "edge_type": "door",
+        "weight": 9.634306143249689e-06
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20139072,
+            30.02774129
+          ],
+          [
+            31.20138838,
+            30.02775075
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 20,
+        "source": 16,
+        "target": 17,
+        "edge_type": "door",
+        "weight": 9.74748103153524e-06
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20138838,
+            30.02775075
+          ],
+          [
+            31.20141614,
+            30.02778183
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 21,
+        "source": 17,
+        "target": 32,
+        "edge_type": "room_connection",
+        "weight": 4.167367111036104e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20136988,
+            30.02773613
+          ],
+          [
+            31.20137217,
+            30.02772688
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 22,
+        "source": 18,
+        "target": 19,
+        "edge_type": "door",
+        "weight": 9.52590505477688e-06
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20137217,
+            30.02772688
+          ],
+          [
+            31.20136534,
+            30.02770081
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 23,
+        "source": 19,
+        "target": 30,
+        "edge_type": "room_connection",
+        "weight": 2.695093956707346e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20133859,
+            30.0277284
+          ],
+          [
+            31.20129742,
+            30.0277181
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 24,
+        "source": 20,
+        "target": 29,
+        "edge_type": "room_connection",
+        "weight": 4.243525724677966e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20137342,
+            30.027737
+          ],
+          [
+            31.20137109,
+            30.02774643
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 25,
+        "source": 21,
+        "target": 22,
+        "edge_type": "door",
+        "weight": 9.706179204408111e-06
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20137109,
+            30.02774643
+          ],
+          [
+            31.20134962,
+            30.02776527
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 26,
+        "source": 22,
+        "target": 31,
+        "edge_type": "room_connection",
+        "weight": 2.856750174834325e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20143308,
+            30.02771549
+          ],
+          [
+            31.20141911,
+            30.02771549
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 27,
+        "source": 23,
+        "target": 24,
+        "edge_type": "door",
+        "weight": 1.3966229303719047e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20141099,
+            30.02774631
+          ],
+          [
+            31.20141506,
+            30.02772988
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 28,
+        "source": 25,
+        "target": 26,
+        "edge_type": "door",
+        "weight": 1.6924833472209827e-05
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            31.20143308,
+            30.02769833
+          ],
+          [
+            31.20142408,
+            30.02769833
+          ]
+        ]
+      },
+      "properties": {
+        "feature_type": "edge",
+        "edge_id": 29,
+        "source": 27,
+        "target": 28,
+        "edge_type": "door",
+        "weight": 8.999076065663303e-06
+      }
+    }
+  ]
+}
