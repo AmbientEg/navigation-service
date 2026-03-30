@@ -77,6 +77,53 @@ def _path_distance_meters_from_nodes(G: nx.Graph, path: List[str]) -> float:
     return total
 
 
+def _bearing_degrees(lng1: float, lat1: float, lng2: float, lat2: float) -> float:
+    """Initial bearing from point A to B in degrees [0, 360)."""
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    lam1 = math.radians(lng1)
+    lam2 = math.radians(lng2)
+    d_lam = lam2 - lam1
+
+    y = math.sin(d_lam) * math.cos(phi2)
+    x = math.cos(phi1) * math.sin(phi2) - math.sin(phi1) * math.cos(phi2) * math.cos(d_lam)
+    return (math.degrees(math.atan2(y, x)) + 360.0) % 360.0
+
+
+def _compass_direction(bearing_deg: float) -> str:
+    directions = [
+        "north",
+        "north-east",
+        "east",
+        "south-east",
+        "south",
+        "south-west",
+        "west",
+        "north-west",
+    ]
+    idx = int((bearing_deg + 22.5) // 45) % 8
+    return directions[idx]
+
+
+def _turn_phrase(prev_bearing: float, next_bearing: float) -> str:
+    """Map bearing delta to a user-friendly turn instruction."""
+    delta = (next_bearing - prev_bearing + 540.0) % 360.0 - 180.0
+    abs_delta = abs(delta)
+    if abs_delta < 25.0:
+        return "Continue straight"
+    if delta > 0:
+        if abs_delta < 60.0:
+            return "Slight right"
+        if abs_delta < 120.0:
+            return "Turn right"
+        return "Make a sharp right"
+    if abs_delta < 60.0:
+        return "Slight left"
+    if abs_delta < 120.0:
+        return "Turn left"
+    return "Make a sharp left"
+
+
 async def find_nearest_node(
     db: AsyncSession,
     floor_id: uuid.UUID,
@@ -316,38 +363,60 @@ def generate_steps(
     
     if len(path) == 0:
         return ["You have arrived"]
+    if len(path) == 1:
+        return ["You have arrived at your destination"]
     
-    # Add start instruction
-    first_node = G.nodes[path[0]]
-    if first_node["floor_id"] != G.nodes[path[-1]]["floor_id"]:
-        steps.append(f"Start on floor {first_node['floor_id']}")
+    node_data = [G.nodes[node_id] for node_id in path]
+    segment_distances: List[float] = []
+    segment_bearings: List[float] = []
+    for i in range(1, len(node_data)):
+        prev_node = node_data[i - 1]
+        curr_node = node_data[i]
+        seg_m = _distance_meters(
+            float(prev_node["lng"]),
+            float(prev_node["lat"]),
+            float(curr_node["lng"]),
+            float(curr_node["lat"]),
+        )
+        segment_distances.append(max(seg_m, 0.01))
+        segment_bearings.append(
+            _bearing_degrees(
+                float(prev_node["lng"]),
+                float(prev_node["lat"]),
+                float(curr_node["lng"]),
+                float(curr_node["lat"]),
+            )
+        )
+
+    start_floor = node_data[0]["floor_id"]
+    end_floor = node_data[-1]["floor_id"]
+    heading = _compass_direction(segment_bearings[0])
+    if start_floor != end_floor:
+        steps.append(f"Start on floor {start_floor} and head {heading}")
     else:
-        steps.append("Head towards destination")
-    
-    # Detect floor changes
-    current_floor = None
-    for i, node_id in enumerate(path):
-        node = G.nodes[node_id]
-        if current_floor is None:
-            current_floor = node["floor_id"]
-        elif current_floor != node["floor_id"]:
-            steps.append(f"Change to floor {node['floor_id']}")
-            current_floor = node["floor_id"]
-        
-        # Add distance markers every few nodes
-        if i > 0 and i % 5 == 0 and i < len(path) - 1:
-            edge_data = G.get_edge_data(path[i-1], node_id)
-            if edge_data:
-                segment_m = float(edge_data.get("weight") or 0.0)
-                if segment_m < 0.5:
-                    prev_node = G.nodes[path[i - 1]]
-                    segment_m = _distance_meters(
-                        float(prev_node["lng"]),
-                        float(prev_node["lat"]),
-                        float(node["lng"]),
-                        float(node["lat"]),
-                    )
-                steps.append(f"Continue straight for {round(segment_m, 1)}m")
+        steps.append(f"Head {heading} towards destination")
+
+    current_phrase = "Continue straight"
+    current_distance = segment_distances[0]
+    for seg_idx in range(1, len(segment_distances)):
+        next_floor = node_data[seg_idx + 1]["floor_id"]
+
+        if node_data[seg_idx]["floor_id"] != next_floor:
+            steps.append(f"{current_phrase} for {round(current_distance, 1)}m")
+            steps.append(f"Change to floor {next_floor}")
+            current_phrase = "Continue straight"
+            current_distance = segment_distances[seg_idx]
+            continue
+
+        turn = _turn_phrase(segment_bearings[seg_idx - 1], segment_bearings[seg_idx])
+        if turn == "Continue straight":
+            current_distance += segment_distances[seg_idx]
+        else:
+            steps.append(f"{current_phrase} for {round(current_distance, 1)}m")
+            current_phrase = turn
+            current_distance = segment_distances[seg_idx]
+
+    steps.append(f"{current_phrase} for {round(current_distance, 1)}m")
     
     steps.append("You have arrived at your destination")
     
