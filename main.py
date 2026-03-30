@@ -2,7 +2,6 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
-from fastapi.security import HTTPBearer
 import uvicorn
 import logging
 import os
@@ -15,7 +14,7 @@ from models import Base
 from database import db_manager
 
 # Routes
-from routes import buildings_routes, floors_routes, navigation_routes
+from routes import buildings_routes, floors_routes, graph_routes, navigation_routes
 
 # ----------------------------------------------------
 # Production Logging Configuration
@@ -332,14 +331,15 @@ async def liveness_check():
 @app.get("/")
 async def root():
     return {
-        "message": "Recycling & Sustainability Assistant API",
+        "message": "Indoor Navigation API",
         "version": "1.0.0",
         "documentation": "/docs",
         "health": "/health",
         "endpoints": {
-            "chat": "/api/chat",
-            "upload": "/api/upload",
-            "images": "/api/images"
+            "buildings": "/api/buildings",
+            "floors": "/api/floors",
+            "graphs": "/api/graphs",
+            "navigation": "/api/navigation"
         }
     }
 
@@ -350,22 +350,24 @@ async def get_api_status():
         "api_status": "operational",
         "timestamp": datetime.utcnow().isoformat(),
         "features": {
-            "chat": True,
-            "image_upload": True,
-            "image_classification": True,
-            "conversation_history": True,
-            "export_data": True
+            "building_management": True,
+            "floor_geojson_management": True,
+            "graph_rebuild_preview": True,
+            "graph_confirm_versioning": True,
+            "graph_rollback": True,
+            "route_calculation": True
         },
-        "ai_services": {
-            "gemini_chatbot": True,
-            "waste_management_agent": True
+        "routing": {
+            "algorithm": "networkx_shortest_path",
+            "source_of_truth": "floors.floor_geojson",
+            "uses_active_graph_version": True
         }
     }
 
 
 @app.post("/api/feedback")
 async def submit_feedback(feedback: dict):
-    logger.info(f"Received feedback: {feedback}")
+    logger.info(f"Received API feedback: {feedback}")
     return {
         "message": "Thank you for your feedback!",
         "received_at": datetime.utcnow().isoformat()
@@ -378,6 +380,7 @@ async def submit_feedback(feedback: dict):
 app.include_router(buildings_routes.router, prefix="/api/buildings", tags=["Buildings"])
 app.include_router(floors_routes.router, prefix="/api/floors", tags=["Floors"])
 app.include_router(navigation_routes.router, prefix="/api/navigation", tags=["Navigation"])
+app.include_router(graph_routes.router, prefix="/api/graphs", tags=["Graphs"])
 
 
 # ----------------------------------------------------

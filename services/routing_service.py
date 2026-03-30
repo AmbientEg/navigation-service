@@ -5,6 +5,8 @@ from geoalchemy2.functions import ST_Distance, ST_AsText
 from models.routing_nodes import RoutingNode
 from models.routing_edges import RoutingEdge
 from models.edge_types import EdgeType
+from models.floors import Floor
+from models.navigation_graph_versions import NavigationGraphVersion
 from models.poi import POI
 import uuid
 from typing import List, Tuple, Optional
@@ -14,13 +16,17 @@ async def find_nearest_node(
     db: AsyncSession,
     floor_id: uuid.UUID,
     lat: float,
-    lng: float
+    lng: float,
+    graph_version_id: uuid.UUID,
 ) -> Optional[RoutingNode]:
     """Find the nearest routing node to a given coordinate on a floor."""
     # Using ST_Distance to find the closest node
     result = await db.execute(
         select(RoutingNode)
-        .where(RoutingNode.floor_id == floor_id)
+        .where(
+            RoutingNode.floor_id == floor_id,
+            RoutingNode.graph_version_id == graph_version_id,
+        )
         .order_by(
             ST_Distance(
                 RoutingNode.geometry,
@@ -35,6 +41,7 @@ async def find_nearest_node(
 async def build_graph_for_floors(
     db: AsyncSession,
     floor_ids: List[uuid.UUID],
+    graph_version_id: uuid.UUID,
     accessible_only: bool = False
 ) -> nx.Graph:
     """Build a NetworkX graph from routing nodes and edges for given floors."""
@@ -43,7 +50,10 @@ async def build_graph_for_floors(
     # Get all nodes for the floors
     nodes_result = await db.execute(
         select(RoutingNode)
-        .where(RoutingNode.floor_id.in_(floor_ids))
+        .where(
+            RoutingNode.floor_id.in_(floor_ids),
+            RoutingNode.graph_version_id == graph_version_id,
+        )
     )
     nodes = nodes_result.scalars().all()
     
@@ -69,7 +79,8 @@ async def build_graph_for_floors(
     node_ids = [node.id for node in nodes]
     edges_query = select(RoutingEdge).where(
         RoutingEdge.from_node_id.in_(node_ids),
-        RoutingEdge.to_node_id.in_(node_ids)
+        RoutingEdge.to_node_id.in_(node_ids),
+        RoutingEdge.graph_version_id == graph_version_id,
     )
     
     if accessible_only:
@@ -110,6 +121,25 @@ async def calculate_route(
     poi = await db.get(POI, to_poi_id)
     if not poi:
         raise ValueError("POI not found")
+
+    from_floor = await db.get(Floor, from_floor_id)
+    to_floor = await db.get(Floor, poi.floor_id)
+    if not from_floor or not to_floor:
+        raise ValueError("Source or destination floor not found")
+    if from_floor.building_id != to_floor.building_id:
+        raise ValueError("Cross-building routing is not supported")
+
+    active_version_stmt = (
+        select(NavigationGraphVersion)
+        .where(
+            NavigationGraphVersion.building_id == from_floor.building_id,
+            NavigationGraphVersion.is_active.is_(True),
+        )
+        .order_by(NavigationGraphVersion.version_number.desc())
+    )
+    active_graph_version = (await db.execute(active_version_stmt)).scalars().first()
+    if not active_graph_version:
+        raise ValueError("No active navigation graph version found for this building")
     
     # Get POI coordinates
     poi_coords_result = await db.execute(select(ST_AsText(poi.geometry)))
@@ -118,8 +148,20 @@ async def calculate_route(
     poi_lng, poi_lat = float(poi_coords[0]), float(poi_coords[1])
     
     # Find nearest nodes to start and end points
-    start_node = await find_nearest_node(db, from_floor_id, from_lat, from_lng)
-    end_node = await find_nearest_node(db, poi.floor_id, poi_lat, poi_lng)
+    start_node = await find_nearest_node(
+        db,
+        from_floor_id,
+        from_lat,
+        from_lng,
+        active_graph_version.id,
+    )
+    end_node = await find_nearest_node(
+        db,
+        poi.floor_id,
+        poi_lat,
+        poi_lng,
+        active_graph_version.id,
+    )
     
     if not start_node or not end_node:
         raise ValueError("Could not find routing nodes near start or destination")
@@ -128,7 +170,7 @@ async def calculate_route(
     floor_ids = list({from_floor_id, poi.floor_id})
     
     # Build graph
-    G = await build_graph_for_floors(db, floor_ids, accessible)
+    G = await build_graph_for_floors(db, floor_ids, active_graph_version.id, accessible)
     
     if not nx.has_path(G, str(start_node.id), str(end_node.id)):
         raise ValueError("No route found between start and destination")

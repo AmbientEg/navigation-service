@@ -19,6 +19,16 @@ def load_geojson(file_path):
     with open(file_path) as f:
         return json.load(f)
 
+
+def load_geojson_from_dict(geojson: dict):
+    """Normalize in-memory GeoJSON input for pipeline execution."""
+    if not isinstance(geojson, dict):
+        raise ValueError("GeoJSON must be a dictionary")
+    if geojson.get("type") != "FeatureCollection":
+        raise ValueError("GeoJSON must be a FeatureCollection")
+    geojson.setdefault("features", [])
+    return geojson
+
 # =========================
 # CLASSIFY FEATURES
 # =========================
@@ -329,6 +339,80 @@ def export_graph(G, output_file):
 
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(geojson, f, indent=2)
+
+
+def graph_to_geojson_dict(G):
+    """Export a graph to GeoJSON dict without touching the file system."""
+    features = []
+    node_id_map = {}
+
+    next_node_id = 1
+    for node, attrs in G.nodes(data=True):
+        coords = _extract_node_coordinates(node, attrs)
+        if coords is None:
+            continue
+
+        node_id_map[node] = next_node_id
+        x, y = coords
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": [x, y]},
+                "properties": {
+                    "node_id": next_node_id,
+                    "node_type": attrs.get("type"),
+                    "name": attrs.get("name"),
+                    "space_type": attrs.get("space_type"),
+                    "feature_type": "node",
+                },
+            }
+        )
+        next_node_id += 1
+
+    next_edge_id = 1
+    for u, v, attrs in G.edges(data=True):
+        if u not in node_id_map or v not in node_id_map:
+            continue
+
+        u_coords = _extract_node_coordinates(u, G.nodes[u])
+        v_coords = _extract_node_coordinates(v, G.nodes[v])
+        if u_coords is None or v_coords is None:
+            continue
+
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [[u_coords[0], u_coords[1]], [v_coords[0], v_coords[1]]],
+                },
+                "properties": {
+                    "edge_id": next_edge_id,
+                    "source": node_id_map[u],
+                    "target": node_id_map[v],
+                    "edge_type": attrs.get("edge_type"),
+                    "weight": attrs.get("weight"),
+                    "feature_type": "edge",
+                },
+            }
+        )
+        next_edge_id += 1
+
+    return {"type": "FeatureCollection", "features": features}
+
+
+def build_navigation_graph(geojson: dict) -> nx.Graph:
+    """Build navigation graph directly from in-memory floor GeoJSON."""
+    G = nx.Graph()
+    data = load_geojson_from_dict(geojson)
+    corridor_lines, doors, rooms, _walls = classify_features(data)
+    build_corridor_backbone(G, corridor_lines)
+    add_junctions(G)
+    attach_doors(G, doors)
+    attach_rooms(G, rooms)
+    remove_self_loops(G)
+    remove_zero_length_edges(G)
+    return G
 
 # =========================
 # clean up graph by removing self-loops and zero-length edges
