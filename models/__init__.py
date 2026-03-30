@@ -2,6 +2,7 @@ from .base import Base, TimestampMixin
 from .buildings import Building
 from .edge_types import EdgeType
 from .floors import Floor
+from .navigation_graph_versions import NavigationGraphVersion
 from .node_types import NodeType
 from .poi import POI
 from .routing_edges import RoutingEdge
@@ -13,6 +14,7 @@ __all__ = [
     "Building",
     "EdgeType",
     "Floor",
+    "NavigationGraphVersion",
     "NodeType",
     "POI",
     "RoutingEdge",

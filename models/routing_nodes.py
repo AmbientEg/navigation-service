@@ -13,6 +13,7 @@ class RoutingNode(Base, TimestampMixin):
     __table_args__ = (
         Index("ix_routing_nodes_floor_id", "floor_id"),
         Index("ix_routing_nodes_node_type_id", "node_type_id"),
+        Index("ix_routing_nodes_graph_version_id", "graph_version_id"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(
@@ -31,6 +32,12 @@ class RoutingNode(Base, TimestampMixin):
         UUID(as_uuid=True),
         ForeignKey("node_types.id"),
         nullable=False
+    )
+
+    graph_version_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("navigation_graph_versions.id", ondelete="CASCADE"),
+        nullable=False,
     )
 
     # PostGIS point geometry with spatial index
@@ -58,4 +65,7 @@ class RoutingNode(Base, TimestampMixin):
     )
 
     def __repr__(self) -> str:
-        return f"<RoutingNode(id={self.id}, floor_id={self.floor_id}, type={self.node_type_id})>"
+        return (
+            f"<RoutingNode(id={self.id}, floor_id={self.floor_id}, "
+            f"version={self.graph_version_id}, type={self.node_type_id})>"
+        )

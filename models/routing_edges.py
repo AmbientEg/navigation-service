@@ -13,6 +13,7 @@ class RoutingEdge(Base, TimestampMixin):
         Index("ix_routing_edges_from_node_id", "from_node_id"),
         Index("ix_routing_edges_to_node_id", "to_node_id"),
         Index("ix_routing_edges_edge_type_id", "edge_type_id"),
+        Index("ix_routing_edges_graph_version_id", "graph_version_id"),
         Index("ix_routing_edges_nodes", "from_node_id", "to_node_id", unique=True),
         CheckConstraint("distance > 0", name="check_distance_positive"),
     )
@@ -41,6 +42,12 @@ class RoutingEdge(Base, TimestampMixin):
         nullable=False
     )
 
+    graph_version_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("navigation_graph_versions.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
     distance: Mapped[float] = mapped_column(Float, nullable=False)
 
     # Relationships
@@ -57,4 +64,7 @@ class RoutingEdge(Base, TimestampMixin):
     )
 
     def __repr__(self) -> str:
-        return f"<RoutingEdge(id={self.id}, from={self.from_node_id}, to={self.to_node_id}, distance={self.distance})>"
+        return (
+            f"<RoutingEdge(id={self.id}, from={self.from_node_id}, to={self.to_node_id}, "
+            f"version={self.graph_version_id}, distance={self.distance})>"
+        )
