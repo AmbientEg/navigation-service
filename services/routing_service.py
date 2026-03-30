@@ -1,8 +1,9 @@
 import networkx as nx
 import inspect
-from sqlalchemy import select
+import math
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from geoalchemy2.functions import ST_Distance, ST_AsText
+from geoalchemy2.functions import ST_AsText, ST_Distance, ST_X, ST_Y
 from models.routing_nodes import RoutingNode
 from models.routing_edges import RoutingEdge
 from models.edge_types import EdgeType
@@ -51,6 +52,31 @@ def _extract_node_lng_lat(node) -> Tuple[float, float]:
     return 0.0, 0.0
 
 
+def _distance_meters(lng1: float, lat1: float, lng2: float, lat2: float) -> float:
+    """Fast local approximation suitable for indoor-scale paths."""
+    avg_lat_rad = math.radians((lat1 + lat2) / 2.0)
+    meters_per_deg_lat = 111_132.0
+    meters_per_deg_lng = 111_320.0 * math.cos(avg_lat_rad)
+    dx = (lng2 - lng1) * meters_per_deg_lng
+    dy = (lat2 - lat1) * meters_per_deg_lat
+    return (dx * dx + dy * dy) ** 0.5
+
+
+def _path_distance_meters_from_nodes(G: nx.Graph, path: List[str]) -> float:
+    total = 0.0
+    for i in range(1, len(path)):
+        prev_node = G.nodes[path[i - 1]]
+        curr_node = G.nodes[path[i]]
+        segment = _distance_meters(
+            float(prev_node["lng"]),
+            float(prev_node["lat"]),
+            float(curr_node["lng"]),
+            float(curr_node["lat"]),
+        )
+        total += max(segment, 0.01)
+    return total
+
+
 async def find_nearest_node(
     db: AsyncSession,
     floor_id: uuid.UUID,
@@ -59,6 +85,9 @@ async def find_nearest_node(
     graph_version_id: uuid.UUID,
 ) -> Optional[RoutingNode]:
     """Find the nearest routing node to a given coordinate on a floor."""
+    # Build a typed geometry point to avoid SRID=0 literals in PostGIS.
+    query_point = func.ST_SetSRID(func.ST_MakePoint(lng, lat), 4326)
+
     # Using ST_Distance to find the closest node
     result = await db.execute(
         select(RoutingNode)
@@ -69,7 +98,7 @@ async def find_nearest_node(
         .order_by(
             ST_Distance(
                 RoutingNode.geometry,
-                f"POINT({lng} {lat})"
+                query_point,
             )
         )
         .limit(1)
@@ -91,24 +120,32 @@ async def build_graph_for_floors(
     
     # Get all nodes for the floors
     nodes_result = await db.execute(
-        select(RoutingNode)
+        select(
+            RoutingNode,
+            ST_X(RoutingNode.geometry).label("lng"),
+            ST_Y(RoutingNode.geometry).label("lat"),
+        )
         .where(
             RoutingNode.floor_id.in_(floor_ids),
             RoutingNode.graph_version_id == graph_version_id,
         )
     )
-    node_scalars = await _await_if_needed(nodes_result.scalars())
-    nodes = await _await_if_needed(node_scalars.all())
+    node_rows = await _await_if_needed(nodes_result.all())
+    nodes = [row[0] for row in node_rows]
     
     # Add nodes to graph with their coordinates
-    for node in nodes:
-        lng, lat = _extract_node_lng_lat(node)
+    for row in node_rows:
+        node = row[0]
+        lng = row[1]
+        lat = row[2]
+        if lng is None or lat is None:
+            lng, lat = _extract_node_lng_lat(node)
         
         G.add_node(
             str(node.id),
             floor_id=str(node.floor_id),
-            lat=lat,
-            lng=lng,
+            lat=float(lat),
+            lng=float(lng),
             node_type_id=str(node.node_type_id)
         )
     
@@ -223,13 +260,20 @@ async def calculate_route(
         weight="weight"
     )
     
-    # Calculate total distance
+    # Calculate total distance from graph weights first.
     total_distance = nx.shortest_path_length(
         G,
         source=str(start_node.id),
         target=str(end_node.id),
         weight="weight"
     )
+
+    # Legacy graph versions may store tiny degree-based edge weights.
+    # If path length is suspiciously small, derive meters from node coordinates.
+    if total_distance < 1.0:
+        geometric_distance = _path_distance_meters_from_nodes(G, path)
+        if geometric_distance > 0:
+            total_distance = geometric_distance
     
     # Group path by floors
     floors_data = {}
@@ -294,7 +338,16 @@ def generate_steps(
         if i > 0 and i % 5 == 0 and i < len(path) - 1:
             edge_data = G.get_edge_data(path[i-1], node_id)
             if edge_data:
-                steps.append(f"Continue straight for {round(edge_data['weight'], 1)}m")
+                segment_m = float(edge_data.get("weight") or 0.0)
+                if segment_m < 0.5:
+                    prev_node = G.nodes[path[i - 1]]
+                    segment_m = _distance_meters(
+                        float(prev_node["lng"]),
+                        float(prev_node["lat"]),
+                        float(node["lng"]),
+                        float(node["lat"]),
+                    )
+                steps.append(f"Continue straight for {round(segment_m, 1)}m")
     
     steps.append("You have arrived at your destination")
     

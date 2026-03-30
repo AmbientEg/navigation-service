@@ -1,9 +1,11 @@
 import math
 import uuid
+from copy import deepcopy
 from collections import defaultdict
 
 from geoalchemy2 import WKTElement
-from sqlalchemy import Select, func, select, update
+from shapely.geometry import shape
+from sqlalchemy import Select, delete, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.buildings import Building
@@ -11,13 +13,82 @@ from models.edge_types import EdgeType
 from models.floors import Floor
 from models.navigation_graph_versions import NavigationGraphVersion
 from models.node_types import NodeType
+from models.poi import POI
 from models.routing_edges import RoutingEdge
 from models.routing_nodes import RoutingNode
+from pipeline.step1_draw_Centerlines import CenterLineDrawer
+from pipeline.step3_verify_graph import (
+    flag_vertical_movement_edges,
+    verify_edge_weights,
+    verify_node_coordinates,
+)
 from pipeline.step2_construct_graph import build_navigation_graph
+from services.crs_service import looks_like_utm, normalize_point_for_db, validate_wgs84_coordinates
 
 
 VERTICAL_NAME_HINTS = {"stair", "stairs", "elevator", "lift", "entrance", "exit"}
 DEFAULT_VERTICAL_TRAVEL_METERS = 3.0
+
+
+def _apply_pipeline_steps_1_to_3(geojson: dict) -> tuple[object, dict]:
+    """
+    Run the API preview pipeline in-memory:
+    - Step 1: Convert corridor polygons to centerlines (when needed)
+    - Step 2: Build graph from normalized features
+    - Step 3: Verify/flag graph metadata
+    """
+    features = geojson.get("features", []) if isinstance(geojson, dict) else []
+    corridor_polygons = [
+        f
+        for f in features
+        if (f.get("properties", {}).get("space_type") == "corridor")
+        and (f.get("geometry", {}).get("type") == "Polygon")
+    ]
+
+    # Step 1 (in-memory): only when source map stores corridors as polygons.
+    processed_geojson = deepcopy(geojson)
+    centerlines_applied = False
+    if corridor_polygons:
+        drawer = CenterLineDrawer()
+        processed_geojson = drawer.process_geojson(processed_geojson)
+        centerlines_applied = True
+
+    # Step 2
+    floor_graph = build_navigation_graph(processed_geojson)
+
+    # Step 3
+    problematic_edges, fixed_weight_count = verify_edge_weights(floor_graph)
+    invalid_nodes, _valid_node_count = verify_node_coordinates(floor_graph)
+    vertical_count = flag_vertical_movement_edges(floor_graph)
+
+    diagnostics = {
+        "centerlines_applied": centerlines_applied,
+        "corridor_polygons_detected": len(corridor_polygons),
+        "problematic_edges": len(problematic_edges),
+        "invalid_nodes": len(invalid_nodes),
+        "fixed_weights": fixed_weight_count,
+        "vertical_edges_flagged": vertical_count,
+    }
+    return floor_graph, diagnostics
+
+
+def _is_truthy_poi(value) -> bool:
+    if value is True:
+        return True
+    if isinstance(value, (int, float)):
+        return value != 0
+    if isinstance(value, str):
+        return value.strip().lower() in {"true", "1", "yes"}
+    return False
+
+
+def _poi_point_from_feature(feature_geometry):
+    geom = shape(feature_geometry)
+    if geom.geom_type in {"Polygon", "MultiPolygon"}:
+        return geom.centroid
+    if geom.geom_type in {"LineString", "MultiLineString"}:
+        return geom.interpolate(0.5, normalized=True)
+    return geom
 
 
 def _safe_name(value: str | None) -> str | None:
@@ -250,10 +321,12 @@ async def build_graph_preview_for_building(db: AsyncSession, building_id: uuid.U
     all_nodes: list[dict] = []
     all_edges: list[dict] = []
     floor_nodes: dict[str, list[dict]] = {}
+    floor_pipeline_diagnostics: dict[str, dict] = {}
 
     for floor in floors:
         geojson = floor.floor_geojson or {"type": "FeatureCollection", "features": []}
-        floor_graph = build_navigation_graph(geojson)
+        floor_graph, diagnostics = _apply_pipeline_steps_1_to_3(geojson)
+        floor_pipeline_diagnostics[str(floor.id)] = diagnostics
         nodes, edges = _preview_nodes_edges_for_floor(floor, floor_graph)
         floor_nodes[str(floor.id)] = nodes
         all_nodes.extend(nodes)
@@ -271,6 +344,10 @@ async def build_graph_preview_for_building(db: AsyncSession, building_id: uuid.U
             "total_edges": len(all_edges),
             "stitched_edges": len(stitched_edges),
             "floors_processed": len(floors),
+        },
+        "pipeline": {
+            "steps_executed": ["step1_centerlines", "step2_construct_graph", "step3_verify_graph"],
+            "floors": floor_pipeline_diagnostics,
         },
     }
 
@@ -344,6 +421,67 @@ async def confirm_graph_preview(
         )
         created_edges += 1
 
+    # Refresh POIs from floor GeoJSON for this building (pipeline parity).
+    floor_ids = {
+        node.get("floor_id")
+        for node in preview.get("nodes", [])
+        if node.get("floor_id")
+    }
+
+    created_pois = 0
+    if floor_ids:
+        floor_stmt = select(Floor).where(Floor.id.in_([uuid.UUID(fid) for fid in floor_ids]))
+        floor_result = await db.execute(floor_stmt)
+        floors = floor_result.scalars().all()
+        if not isinstance(floors, list):
+            floors = []
+
+        for floor in floors:
+            await db.execute(delete(POI).where(POI.floor_id == floor.id))
+
+            floor_geojson = floor.floor_geojson or {"type": "FeatureCollection", "features": []}
+            for feature in floor_geojson.get("features", []):
+                props = feature.get("properties", {})
+                geometry = feature.get("geometry")
+                if not geometry:
+                    continue
+                if not _is_truthy_poi(props.get("poi")):
+                    continue
+
+                try:
+                    poi_point = _poi_point_from_feature(geometry)
+                except Exception:
+                    continue
+
+                x_poi, y_poi = poi_point.x, poi_point.y
+                source_crs = "UTM" if looks_like_utm(x_poi, y_poi) else "WGS84"
+                try:
+                    x_norm, y_norm = normalize_point_for_db(
+                        x_poi,
+                        y_poi,
+                        source_crs=source_crs,
+                        target_crs="WGS84",
+                    )
+                except ValueError:
+                    continue
+
+                if not validate_wgs84_coordinates(x_norm, y_norm):
+                    continue
+
+                poi_name = props.get("name") or props.get("label") or "poi"
+                poi_type = (props.get("space_type") or "poi").lower()
+
+                db.add(
+                    POI(
+                        floor_id=floor.id,
+                        name=poi_name,
+                        type=poi_type,
+                        geometry=WKTElement(f"POINT({x_norm} {y_norm})", srid=4326),
+                        extra_data=props,
+                    )
+                )
+                created_pois += 1
+
     await db.commit()
 
     return {
@@ -353,6 +491,7 @@ async def confirm_graph_preview(
         "persisted": {
             "nodes": created_nodes,
             "edges": created_edges,
+            "pois": created_pois,
             "floors": preview.get("summary", {}).get("floors_processed", 0),
         },
     }
