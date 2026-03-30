@@ -13,13 +13,16 @@ Policy:
 - Runtime inputs must be in WGS84 (lat/lng).
 """
 
-from typing import Tuple, Literal, Optional
+from typing import Tuple, Literal, Optional, Any
 import logging
 
 try:
     from pyproj import Transformer, CRS
     PYPROJ_AVAILABLE = True
 except ImportError:
+    # Keep symbols defined so runtime type annotations do not fail at import time.
+    Transformer = Any
+    CRS = Any
     PYPROJ_AVAILABLE = False
 
 logger = logging.getLogger(__name__)

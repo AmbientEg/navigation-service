@@ -13,8 +13,8 @@ router = APIRouter()
 
 class RouteFrom(BaseModel):
     floorId: str = Field(..., description="UUID of the starting floor")
-    lat: float = Field(..., description="Latitude of starting position")
-    lng: float = Field(..., description="Longitude of starting position")
+    lat: float = Field(..., ge=-90.0, le=90.0, description="Latitude of starting position")
+    lng: float = Field(..., ge=-180.0, le=180.0, description="Longitude of starting position")
 
 
 class RouteTo(BaseModel):

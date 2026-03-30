@@ -244,6 +244,7 @@ def _extract_node_coordinates(node, attrs):
     Supports:
       - tuple/list node keys like (x, y)
       - node attributes containing x/y
+      - node attributes containing lng/lat (geographic coordinates)
     Returns (x, y) or None if coordinates cannot be resolved.
     """
     if isinstance(node, (tuple, list)) and len(node) >= 2:
@@ -253,6 +254,12 @@ def _extract_node_coordinates(node, attrs):
     y = attrs.get("y")
     if x is not None and y is not None:
         return float(x), float(y)
+
+    # Support geographic coordinates (lng/lat)
+    lng = attrs.get("lng")
+    lat = attrs.get("lat")
+    if lng is not None and lat is not None:
+        return float(lng), float(lat)
 
     return None
 

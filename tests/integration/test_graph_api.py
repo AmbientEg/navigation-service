@@ -272,7 +272,7 @@ class TestGraphRollback:
         """Should return 500 on unexpected error."""
         with patch('database.get_db_session') as mock_get_db:
             mock_get_db.return_value.__aenter__ = AsyncMock(return_value=mock_db_session)
-            mock_db.return_value.__aexit__ = AsyncMock(return_value=None)
+            mock_get_db.return_value.__aexit__ = AsyncMock(return_value=None)
 
             with patch('routes.graph_routes.rollback_to_previous_graph_version') as mock_rollback:
                 mock_rollback.side_effect = Exception("Database error")

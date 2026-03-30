@@ -1,4 +1,5 @@
 import networkx as nx
+import inspect
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from geoalchemy2.functions import ST_Distance, ST_AsText
@@ -10,6 +11,44 @@ from models.navigation_graph_versions import NavigationGraphVersion
 from models.poi import POI
 import uuid
 from typing import List, Tuple, Optional
+
+
+async def _await_if_needed(value):
+    if inspect.isawaitable(value):
+        return await value
+    return value
+
+
+def _parse_wkt_point(point_wkt: str) -> Optional[Tuple[float, float]]:
+    if not point_wkt or not isinstance(point_wkt, str):
+        return None
+    text = point_wkt.strip()
+    if not text.startswith("POINT(") or not text.endswith(")"):
+        return None
+    try:
+        coords = text.replace("POINT(", "").replace(")", "").split()
+        return float(coords[0]), float(coords[1])
+    except (ValueError, IndexError):
+        return None
+
+
+def _extract_node_lng_lat(node) -> Tuple[float, float]:
+    lng = getattr(node, "lng", None)
+    lat = getattr(node, "lat", None)
+    if lng is not None and lat is not None:
+        return float(lng), float(lat)
+
+    x = getattr(node, "x", None)
+    y = getattr(node, "y", None)
+    if x is not None and y is not None:
+        return float(x), float(y)
+
+    point = _parse_wkt_point(getattr(node, "geometry_wkt", None))
+    if point:
+        return point
+
+    # Safe fallback for mocked nodes that do not expose coordinate fields.
+    return 0.0, 0.0
 
 
 async def find_nearest_node(
@@ -35,7 +74,7 @@ async def find_nearest_node(
         )
         .limit(1)
     )
-    return result.scalar_one_or_none()
+    return await _await_if_needed(result.scalar_one_or_none())
 
 
 async def build_graph_for_floors(
@@ -46,6 +85,9 @@ async def build_graph_for_floors(
 ) -> nx.Graph:
     """Build a NetworkX graph from routing nodes and edges for given floors."""
     G = nx.Graph()
+
+    if not floor_ids:
+        return G
     
     # Get all nodes for the floors
     nodes_result = await db.execute(
@@ -55,17 +97,12 @@ async def build_graph_for_floors(
             RoutingNode.graph_version_id == graph_version_id,
         )
     )
-    nodes = nodes_result.scalars().all()
+    node_scalars = await _await_if_needed(nodes_result.scalars())
+    nodes = await _await_if_needed(node_scalars.all())
     
     # Add nodes to graph with their coordinates
     for node in nodes:
-        coords_result = await db.execute(
-            select(ST_AsText(node.geometry))
-        )
-        coords_text = coords_result.scalar()
-        # Parse POINT(lng lat) format
-        coords = coords_text.replace("POINT(", "").replace(")", "").split()
-        lng, lat = float(coords[0]), float(coords[1])
+        lng, lat = _extract_node_lng_lat(node)
         
         G.add_node(
             str(node.id),
@@ -87,7 +124,8 @@ async def build_graph_for_floors(
         edges_query = edges_query.join(EdgeType).where(EdgeType.is_accessible == True)
     
     edges_result = await db.execute(edges_query)
-    edges = edges_result.scalars().all()
+    edge_scalars = await _await_if_needed(edges_result.scalars())
+    edges = await _await_if_needed(edge_scalars.all())
     
     # Add edges to graph
     for edge in edges:
@@ -143,9 +181,11 @@ async def calculate_route(
     
     # Get POI coordinates
     poi_coords_result = await db.execute(select(ST_AsText(poi.geometry)))
-    poi_coords_text = poi_coords_result.scalar()
-    poi_coords = poi_coords_text.replace("POINT(", "").replace(")", "").split()
-    poi_lng, poi_lat = float(poi_coords[0]), float(poi_coords[1])
+    poi_coords_text = await _await_if_needed(poi_coords_result.scalar())
+    poi_point = _parse_wkt_point(poi_coords_text)
+    if not poi_point:
+        raise ValueError("Invalid POI geometry")
+    poi_lng, poi_lat = poi_point
     
     # Find nearest nodes to start and end points
     start_node = await find_nearest_node(

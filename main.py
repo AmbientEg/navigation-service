@@ -1,4 +1,6 @@
 from fastapi import FastAPI, Request, HTTPException
+from fastapi.exceptions import RequestValidationError
+from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
@@ -159,26 +161,16 @@ async def log_requests(request: Request, call_next):
         f"Correlation ID: {correlation_id}"
     )
 
-    try:
-        response = await call_next(request)
-        process_time = (datetime.utcnow() - start_time).total_seconds()
+    response = await call_next(request)
+    process_time = (datetime.utcnow() - start_time).total_seconds()
 
-        logger.info(
-            f"Request completed - Status: {response.status_code}, "
-            f"Duration: {process_time:.3f}s, "
-            f"Correlation ID: {correlation_id}"
-        )
+    logger.info(
+        f"Request completed - Status: {response.status_code}, "
+        f"Duration: {process_time:.3f}s, "
+        f"Correlation ID: {correlation_id}"
+    )
 
-        return response
-    except Exception as e:
-        process_time = (datetime.utcnow() - start_time).total_seconds()
-        logger.error(
-            f"Request failed - Error: {str(e)}, "
-            f"Duration: {process_time:.3f}s, "
-            f"Correlation ID: {correlation_id}",
-            exc_info=True
-        )
-        raise
+    return response
 
 
 # Trusted Host Middleware (for production)
@@ -225,6 +217,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
     return JSONResponse(
         status_code=exc.status_code,
         content={
+            "detail": exc.detail,
             "error": exc.detail,
             "status_code": exc.status_code,
             "timestamp": datetime.utcnow().isoformat(),
@@ -232,6 +225,28 @@ async def http_exception_handler(request: Request, exc: HTTPException):
             "correlation_id": correlation_id,
             "type": "http_error"
         }
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def request_validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Map malformed JSON payload errors to 400 while keeping other validation as 422."""
+    correlation_id = getattr(request.state, 'correlation_id', 'unknown')
+    errors = jsonable_encoder(exc.errors())
+    is_json_parse_error = any(err.get("type") == "json_invalid" for err in errors)
+    status_code = 400 if is_json_parse_error else 422
+
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "detail": errors,
+            "error": "Malformed JSON" if is_json_parse_error else "Validation failed",
+            "status_code": status_code,
+            "timestamp": datetime.utcnow().isoformat(),
+            "path": request.url.path,
+            "correlation_id": correlation_id,
+            "type": "validation_error",
+        },
     )
 
 
@@ -254,6 +269,7 @@ async def global_exception_handler(request: Request, exc: Exception):
     return JSONResponse(
         status_code=500,
         content={
+            "detail": error_detail,
             "error": error_detail,
             "status_code": 500,
             "timestamp": datetime.utcnow().isoformat(),

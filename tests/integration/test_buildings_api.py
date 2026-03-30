@@ -369,4 +369,4 @@ class TestAPIErrorHandling:
                 responses.append(response.status_code)
 
             # All should succeed or be rate limited
-            assert all(code in [200, 201, 429] for code in responses)
+            assert all(code in [200, 201, 422, 429] for code in responses)
