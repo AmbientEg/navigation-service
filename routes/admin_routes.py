@@ -97,12 +97,26 @@ def _serialize_routing_edge(row: RoutingEdge) -> dict[str, Any]:
 
 
 def _serialize_poi(row: POI) -> dict[str, Any]:
+    # Parse WKT geometry to extract coordinates
+    geometry_data = None
+    if row.geometry is not None:
+        wkt_str = str(row.geometry)
+        # Extract coordinates from POINT(x y) format
+        if wkt_str.startswith('POINT('):
+            coords_str = wkt_str.replace('POINT(', '').replace(')', '')
+            coords = coords_str.split()
+            if len(coords) == 2:
+                geometry_data = {
+                    "type": "Point",
+                    "coordinates": [float(coords[0]), float(coords[1])]
+                }
+    
     return {
         "id": _to_id(row.id),
         "floor_id": _to_id(row.floor_id),
         "name": row.name,
         "type": row.type,
-        "geometry": str(row.geometry) if row.geometry is not None else None,
+        "geometry": geometry_data,
         "extra_data": row.extra_data,
         "created_at": row.created_at,
         "updated_at": row.updated_at,

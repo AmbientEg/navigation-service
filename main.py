@@ -22,6 +22,11 @@ try:
 except ImportError:
     admin_routes = None
 
+try:
+    import routes.poi_routes as poi_routes
+except ImportError:
+    poi_routes = None
+
 # ----------------------------------------------------
 # Production Logging Configuration
 # ----------------------------------------------------
@@ -102,6 +107,17 @@ app = FastAPI(
         "persistAuthorization": True,
     }
 )
+
+# Include routers immediately after app creation
+app.include_router(navigation_routes.router, prefix="/api/navigation", tags=["Navigation"])
+app.include_router(buildings_routes.router, prefix="/api/buildings", tags=["Buildings"])
+app.include_router(floors_routes.router, prefix="/api/floors", tags=["Floors"])
+app.include_router(graph_routes.router, prefix="/api/graphs", tags=["Graphs"])
+if admin_routes:
+    app.include_router(admin_routes.router, prefix="/api/admin", tags=["Admin"])
+
+if poi_routes:
+    app.include_router(poi_routes.router, prefix="/api/admin/pois", tags=["POIs"])
 
 
 
@@ -394,25 +410,13 @@ async def submit_feedback(feedback: dict):
     }
 
 
-# ----------------------------------------------------
-# Routers
-# ----------------------------------------------------
-app.include_router(navigation_routes.router, prefix="/api/navigation", tags=["Navigation"])
-app.include_router(buildings_routes.router, prefix="/api/buildings", tags=["Buildings"])
-app.include_router(floors_routes.router, prefix="/api/floors", tags=["Floors"])
-app.include_router(graph_routes.router, prefix="/api/graphs", tags=["Graphs"])
-if admin_routes:
-    app.include_router(admin_routes.router, prefix="/api/admin", tags=["Admin"])
-
-
-# ----------------------------------------------------
 # Run Server
 # ----------------------------------------------------
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host="127.0.0.1",
-        port=8000,
+        port=8001,
         reload=True,
         log_level="info"
 

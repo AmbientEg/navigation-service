@@ -1,0 +1,17 @@
+fastapi>=0.104
+uvicorn[standard]>=0.24
+sqlalchemy>=2.0
+asyncpg>=0.29
+geoalchemy2>=0.14
+shapely>=2.0
+geojson>=3.1
+pydantic>=2.5
+pydantic-settings>=2.1
+python-dotenv>=1.0
+pyproj>=3.6
+geopandas>=0.14
+networkx>=3.2
+numpy>=1.26
+scipy>=1.11
+alembic>=1.13
+psycopg2-binary>=2.9
