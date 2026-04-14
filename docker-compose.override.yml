@@ -1,0 +1,22 @@
+# Local development overrides.
+# This file is automatically merged when running: docker compose ...
+
+services:
+  api:
+    build:
+      dockerfile: Dockerfile.dev
+    image: navigation-service:dev
+    environment:
+      ENVIRONMENT: development
+      LOG_LEVEL: DEBUG
+      DEBUG: "true"
+      SQL_ECHO: "true"
+    volumes:
+      - ./:/app:cached
+      - ./logs:/app/logs
+      - /app/__pycache__
+      - /app/.pytest_cache
+      - /app/nav-service
+    command: python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload --reload-dir .
+    stdin_open: true
+    tty: true

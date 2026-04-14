@@ -42,7 +42,7 @@ from it. Routing always runs against the active graph version for the building.
 
 ```bash
 source nav-service/bin/activate
-./nav-service/bin/pip install -r requirements.txt.py
+./nav-service/bin/pip install -r requirements.txt
 ```
 
 If you need a minimal explicit install:
