@@ -9,6 +9,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 db_url = os.getenv("DATABASE_URL")
+is_production = os.getenv("ENVIRONMENT", "development").lower() == "production"
+
+
+def parse_bool_env(name: str, default: bool) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
 def clean_asyncpg_url(db_url: str) -> str:
@@ -39,10 +47,12 @@ class DatabaseManager:
             raise ValueError("DATABASE_URL environment variable is not set")
 
         async_database_url = clean_asyncpg_url(database_url)
+        echo_default = False if is_production else True
+        db_echo = parse_bool_env("SQLALCHEMY_ECHO", default=echo_default)
 
         self.engine = create_async_engine(
             async_database_url,
-            echo=True,  # Set to False in production
+            echo=db_echo,
             pool_size=20,
             max_overflow=30,
             pool_pre_ping=True,

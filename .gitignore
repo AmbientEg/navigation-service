@@ -1,0 +1,32 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+nav-service/
+venv/
+.envrc
+
+# Test and coverage artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
+*.tmp
+
+# Local environment files
+.env
+.env.local
+.env.development
+.env.production
+.env.test

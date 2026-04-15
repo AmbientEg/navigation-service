@@ -4,6 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
+from sqlalchemy import text
 import uvicorn
 import logging
 import os
@@ -308,7 +309,7 @@ async def health_check():
         try:
             if not IS_LAMBDA:  # Skip DB check in Lambda cold starts
                 async with db_manager.engine.begin() as conn:
-                    await conn.execute("SELECT 1")
+                    await conn.execute(text("SELECT 1"))
         except Exception as e:
             logger.error(f"Database health check failed: {e}")
             db_healthy = False
@@ -347,7 +348,7 @@ async def readiness_check():
         # More thorough checks for readiness
         if not IS_LAMBDA:
             async with db_manager.engine.begin() as conn:
-                await conn.execute("SELECT 1")
+                await conn.execute(text("SELECT 1"))
 
         return {"status": "ready", "timestamp": datetime.utcnow().isoformat()}
     except Exception as e:
