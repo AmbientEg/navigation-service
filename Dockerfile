@@ -3,6 +3,8 @@
 # =============================================================================
 FROM python:3.12-slim-bookworm AS builder
 
+ENV PIP_NO_CACHE_DIR=1
+
 WORKDIR /app
 
 # it works and creates an image if size ~ 700mb with this layer

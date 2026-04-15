@@ -2,7 +2,7 @@ import json
 import networkx as nx
 from shapely.geometry import shape, Point, LineString, mapping
 from shapely.ops import split
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 # =========================
 # SETTINGS
@@ -171,69 +171,69 @@ def check_connectivity(G):
 # =========================
 # VISUALIZE
 # =========================
-def visualize_graph(G):
-    pos = {n: n for n in G.nodes}
+# def visualize_graph(G):
+#     pos = {n: n for n in G.nodes}
 
-    # Separate nodes by type
-    type_config = {
-        "corridor":   {"color": "gray",   "size": 50,  "shape": "o"},
-        "door":       {"color": "blue",   "size": 50,  "shape": "o"},
-        "room":       {"color": "green",  "size": 50,  "shape": "o"},
-        "junction":   {"color": "red",    "size": 50,  "shape": "o"},
-    }
-    unknown_config = {"color": "orange", "size": 150, "shape": "*"}
+#     # Separate nodes by type
+#     type_config = {
+#         "corridor":   {"color": "gray",   "size": 50,  "shape": "o"},
+#         "door":       {"color": "blue",   "size": 50,  "shape": "o"},
+#         "room":       {"color": "green",  "size": 50,  "shape": "o"},
+#         "junction":   {"color": "red",    "size": 50,  "shape": "o"},
+#     }
+#     unknown_config = {"color": "orange", "size": 150, "shape": "*"}
 
-    fig, ax = plt.subplots()
+#     fig, ax = plt.subplots()
 
-    # Draw edges
-    nx.draw_networkx_edges(G, pos, ax=ax, edge_color="lightgray", width=1)
+#     # Draw edges
+#     nx.draw_networkx_edges(G, pos, ax=ax, edge_color="lightgray", width=1)
 
-    # Draw known-type nodes grouped by type
-    grouped = {}
-    for n, d in G.nodes(data=True):
-        t = d.get("type") if d.get("type") in type_config else None
-        grouped.setdefault(t, []).append(n)
+#     # Draw known-type nodes grouped by type
+#     grouped = {}
+#     for n, d in G.nodes(data=True):
+#         t = d.get("type") if d.get("type") in type_config else None
+#         grouped.setdefault(t, []).append(n)
 
-    for t, nodes in grouped.items():
-        if t is None:
-            continue
-        cfg = type_config[t]
-        nx.draw_networkx_nodes(
-            G, pos,
-            nodelist=nodes,
-            node_color=cfg["color"],
-            node_size=cfg["size"],
-            node_shape=cfg["shape"],
-            ax=ax,
-        )
+#     for t, nodes in grouped.items():
+#         if t is None:
+#             continue
+#         cfg = type_config[t]
+#         nx.draw_networkx_nodes(
+#             G, pos,
+#             nodelist=nodes,
+#             node_color=cfg["color"],
+#             node_size=cfg["size"],
+#             node_shape=cfg["shape"],
+#             ax=ax,
+#         )
 
-    # Draw unknown nodes with star shape, triple size
-    unknown_nodes = grouped.get(None, [])
-    if unknown_nodes:
-        nx.draw_networkx_nodes(
-            G, pos,
-            nodelist=unknown_nodes,
-            node_color=unknown_config["color"],
-            node_size=unknown_config["size"],
-            node_shape=unknown_config["shape"],
-            ax=ax,
-            label="unknown",
-        )
+#     # Draw unknown nodes with star shape, triple size
+#     unknown_nodes = grouped.get(None, [])
+#     if unknown_nodes:
+#         nx.draw_networkx_nodes(
+#             G, pos,
+#             nodelist=unknown_nodes,
+#             node_color=unknown_config["color"],
+#             node_size=unknown_config["size"],
+#             node_shape=unknown_config["shape"],
+#             ax=ax,
+#             label="unknown",
+#         )
 
-    # Legend
-    from matplotlib.lines import Line2D
-    legend_elements = [
-        Line2D([0], [0], marker="o", color="w", markerfacecolor="gray",  markersize=6, label="corridor"),
-        Line2D([0], [0], marker="o", color="w", markerfacecolor="blue",  markersize=6, label="door"),
-        Line2D([0], [0], marker="o", color="w", markerfacecolor="green", markersize=6, label="room"),
-        Line2D([0], [0], marker="o", color="w", markerfacecolor="red",   markersize=6, label="junction"),
-        Line2D([0], [0], marker="*", color="w", markerfacecolor="orange", markersize=10, label="unknown"),
-    ]
-    ax.legend(handles=legend_elements, loc="best", fontsize=8)
-    ax.set_title("Navigation Graph")
-    plt.axis("equal")
-    plt.tight_layout()
-    plt.show()
+#     # Legend
+#     from matplotlib.lines import Line2D
+#     legend_elements = [
+#         Line2D([0], [0], marker="o", color="w", markerfacecolor="gray",  markersize=6, label="corridor"),
+#         Line2D([0], [0], marker="o", color="w", markerfacecolor="blue",  markersize=6, label="door"),
+#         Line2D([0], [0], marker="o", color="w", markerfacecolor="green", markersize=6, label="room"),
+#         Line2D([0], [0], marker="o", color="w", markerfacecolor="red",   markersize=6, label="junction"),
+#         Line2D([0], [0], marker="*", color="w", markerfacecolor="orange", markersize=10, label="unknown"),
+#     ]
+#     ax.legend(handles=legend_elements, loc="best", fontsize=8)
+#     ax.set_title("Navigation Graph")
+#     plt.axis("equal")
+#     plt.tight_layout()
+#     plt.show()
 
 # =========================
 # EXPORT GRAPH TO GEOJSON
