@@ -86,3 +86,7 @@ node_modules/
 tmp/
 temp/
 *.tmp
+
+
+#drafts
+drafts/
