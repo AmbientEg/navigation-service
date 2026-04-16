@@ -40,6 +40,7 @@ class RouteFloorPath(BaseModel):
 
 
 class RouteResponse(BaseModel):
+    buildingId: str
     floors: list[RouteFloorPath]
     distance: float
     steps: list[str]

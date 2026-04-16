@@ -28,6 +28,7 @@ class TestNavigationRoute:
 
             with patch('routes.navigation_routes.routing_service.calculate_route') as mock_calc:
                 mock_calc.return_value = {
+                    "buildingId": str(uuid.uuid4()),
                     "floors": [{"floorId": str(uuid.uuid4()), "path": [[31.23, 30.04], [31.24, 30.05]]}],
                     "distance": 150.5,
                     "steps": ["Start here", "Walk 100m", "You have arrived"]
@@ -37,6 +38,7 @@ class TestNavigationRoute:
 
                 assert response.status_code == 200
                 data = response.json()
+                assert "buildingId" in data
                 assert "floors" in data
                 assert "distance" in data
                 assert "steps" in data
@@ -171,6 +173,7 @@ class TestNavigationRoute:
 
             with patch('routes.navigation_routes.routing_service.calculate_route') as mock_calc:
                 mock_calc.return_value = {
+                    "buildingId": str(uuid.uuid4()),
                     "floors": [],
                     "distance": 100.0,
                     "steps": ["Start", "Arrive"]
@@ -202,6 +205,7 @@ class TestNavigationRoute:
 
             with patch('routes.navigation_routes.routing_service.calculate_route') as mock_calc:
                 mock_calc.return_value = {
+                    "buildingId": str(uuid.uuid4()),
                     "floors": [{"floorId": str(uuid.uuid4()), "path": [[31.23, 30.04]]}],
                     "distance": 0.0,
                     "steps": ["You have arrived at your destination"]
@@ -226,6 +230,7 @@ class TestRouteResponseValidation:
 
         floor_path = RouteFloorPath(floorId=str(uuid.uuid4()), path=[[31.23, 30.04], [31.24, 30.05]])
         response = RouteResponse(
+            buildingId=str(uuid.uuid4()),
             floors=[floor_path],
             distance=150.5,
             steps=["Step 1", "Step 2"]
@@ -240,6 +245,7 @@ class TestRouteResponseValidation:
         from routes.navigation_routes import RouteResponse
 
         response = RouteResponse(
+            buildingId=str(uuid.uuid4()),
             floors=[],
             distance=0.0,
             steps=["You have arrived"]

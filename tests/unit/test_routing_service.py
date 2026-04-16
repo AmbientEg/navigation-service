@@ -186,6 +186,7 @@ class TestCalculateRoute:
                                             to_poi_id, accessible=True
                                         )
 
+                                        assert "buildingId" in route
                                         assert "floors" in route
                                         assert "distance" in route
                                         assert "steps" in route

@@ -344,6 +344,7 @@ async def calculate_route(
     steps = generate_steps(G, path, from_lng, from_lat, poi_lng, poi_lat)
     
     return {
+        "buildingId": str(from_floor.building_id),
         "floors": floors,
         "distance": round(total_distance, 2),
         "steps": steps
