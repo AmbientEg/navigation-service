@@ -96,29 +96,7 @@ async def _get_building_row_or_404(db: AsyncSession, building_uuid: uuid.UUID):
     return row
 
 
-@router.get("")
-async def list_buildings(
-    db: AsyncSession = Depends(get_db_session)
-):
-    """Return all buildings with geometry as WKT string."""
-    rows = (
-        await db.execute(
-            select(
-                Building.id,
-                Building.name,
-                Building.description,
-                Building.floors_count,
-                ST_AsText(Building.geometry).label("geometry_wkt"),
-            ).order_by(Building.name.asc())
-        )
-    )
-    rows = await _await_if_needed(rows.all())
-    if not isinstance(rows, list):
-        return []
-    return [_serialize_building_row(row) for row in rows]
-
-
-@router.post("")
+@router.post("/create")
 async def create_building(
     request: BuildingCreateRequest,
     db: AsyncSession = Depends(get_db_session)
@@ -140,7 +118,7 @@ async def create_building(
     return _serialize_building_row(created_row)
 
 
-@router.get("/{building_id}")
+@router.get("/get/{building_id}")
 async def get_building(
     building_id: str,
     db: AsyncSession = Depends(get_db_session)
@@ -159,7 +137,7 @@ async def get_building(
     return _serialize_building_row(building_row)
 
 
-@router.get("/{building_id}/floors")
+@router.get("/get/{building_id}/floors")
 async def get_building_floors(
     building_id: str,
     db: AsyncSession = Depends(get_db_session)

@@ -1,7 +1,4 @@
-"""
-POI CRUD routes - list by floor, update, and delete endpoints.
-Kept separate to avoid modifying admin_routes.py.
-"""
+"""POI CRUD routes - list by floor, update, and delete endpoints."""
 import uuid
 from typing import Optional, Any
 

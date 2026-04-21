@@ -73,7 +73,7 @@ class FloorGeoJSONUpdateRequest(BaseModel):
         return value
 
 
-@router.post("")
+@router.post("/create")
 async def create_floor(
     request: FloorCreateRequest,
     db: AsyncSession = Depends(get_db_session)
@@ -102,7 +102,7 @@ async def create_floor(
     return _serialize_floor(floor)
 
 
-@router.put("/{floor_id}")
+@router.put("/update/{floor_id}")
 async def update_floor_geojson(
     floor_id: str,
     request: FloorGeoJSONUpdateRequest,
@@ -124,7 +124,7 @@ async def update_floor_geojson(
     return _serialize_floor(floor)
 
 
-@router.get("/{floor_id}/map")
+@router.get("/get/{floor_id}/map")
 async def get_floor_map(
     floor_id: str,
     db: AsyncSession = Depends(get_db_session)

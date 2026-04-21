@@ -19,11 +19,6 @@ from database import db_manager
 # Routes
 from routes import buildings_routes, floors_routes, graph_routes, navigation_routes
 try:
-    import routes.admin_routes as admin_routes
-except ImportError:
-    admin_routes = None
-
-try:
     import routes.poi_routes as poi_routes
 except ImportError:
     poi_routes = None
@@ -114,11 +109,8 @@ app.include_router(navigation_routes.router, prefix="/api/navigation", tags=["Na
 app.include_router(buildings_routes.router, prefix="/api/buildings", tags=["Buildings"])
 app.include_router(floors_routes.router, prefix="/api/floors", tags=["Floors"])
 app.include_router(graph_routes.router, prefix="/api/graphs", tags=["Graphs"])
-if admin_routes:
-    app.include_router(admin_routes.router, prefix="/api/admin", tags=["Admin"])
-
 if poi_routes:
-    app.include_router(poi_routes.router, prefix="/api/admin/pois", tags=["POIs"])
+    app.include_router(poi_routes.router, prefix="/api/pois", tags=["POI"])
 
 
 
@@ -399,15 +391,6 @@ async def get_api_status():
             "source_of_truth": "floors.floor_geojson",
             "uses_active_graph_version": True
         }
-    }
-
-
-@app.post("/api/feedback")
-async def submit_feedback(feedback: dict):
-    logger.info(f"Received API feedback: {feedback}")
-    return {
-        "message": "Thank you for your feedback!",
-        "received_at": datetime.utcnow().isoformat()
     }
 
 

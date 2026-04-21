@@ -1,0 +1,531 @@
+{
+  "info": {
+    "_postman_id": "ddfe6899-0f7d-473f-bd92-0d45afb11695",
+    "name": "Indoor Navigation API PRODUCTION",
+    "description": "Collection for Indoor Navigation API including graph rebuild/confirm/rollback workflow.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46742383",
+    "_collection_link": "https://go.postman.co/collection/46742383-ddfe6899-0f7d-473f-bd92-0d45afb11695?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Readiness",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health/ready",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health",
+                "ready"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Liveness",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health/live",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health",
+                "live"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Buildings",
+      "item": [
+        {
+          "name": "Create Building",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "if (body && body.id) {",
+                  "  pm.environment.set('buildingId', body.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Main Building\",\n  \"description\": \"Campus building\",\n  \"floors_count\": 0,\n  \"geometry_wkt\": \"POLYGON((31.2 30.0, 31.21 30.0, 31.21 30.01, 31.2 30.01, 31.2 30.0))\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/buildings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "buildings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Building",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/buildings/{{buildingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "buildings",
+                "{{buildingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Building Floors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/buildings/{{buildingId}}/floors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "buildings",
+                "{{buildingId}}",
+                "floors"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Floors",
+      "item": [
+        {
+          "name": "Create Floor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const body = pm.response.json();",
+                  "if (body && body.id) {",
+                  "  pm.environment.set('floorId', body.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"building_id\": \"{{buildingId}}\",\n  \"level_number\": 3,\n  \"name\": \"Floor 3\",\n  \"height_meters\": 2.9,\n  \"floor_geojson\": {\n    \"type\": \"FeatureCollection\",\n    \"name\": \"floor3\",\n    \"crs\": {\n        \"type\": \"name\",\n        \"properties\": {\n        \"name\": \"urn:ogc:def:crs:OGC:1.3:CRS84\"\n        }\n    },\n    \"features\": [\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 1,\n            \"uid\": \"hall-35\",\n            \"name\": \"hall-35\",\n            \"label\": \"Lecture Hall 35\",\n            \"space_type\": \"lecture_hall\",\n            \"category\": \"education\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 4,\n            \"color\": \"#4CAF50\",\n            \"opacity\": 0.7,\n            \"icon\": null,\n            \"poi\": true,\n            \"editable\": true,\n            \"selectable\": true,\n            \"routing_cost\": 0\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.201271889963955,\n                30.027653313817222\n                ],\n                [\n                31.201240596135005,\n                30.027762481681496\n                ],\n                [\n                31.20132297145994,\n                30.02778284951732\n                ],\n                [\n                31.20135425612794,\n                30.027673745126737\n                ],\n                [\n                31.201271889963955,\n                30.027653313817222\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 2,\n            \"uid\": \"toilet-boys\",\n            \"name\": \"toilet-boys\",\n            \"label\": \"Boys Toilet\",\n            \"space_type\": \"toilet\",\n            \"category\": \"service\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 3,\n            \"color\": \"#03A9F4\",\n            \"opacity\": 0.7,\n            \"icon\": \"toilet\",\n            \"poi\": true,\n            \"editable\": true,\n            \"selectable\": true,\n            \"routing_cost\": 0\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.201376334034208,\n                30.02772794042386\n                ],\n                [\n                31.20138949832934,\n                30.027682374498433\n                ],\n                [\n                31.20135425612794,\n                30.027673745126737\n                ],\n                [\n                31.20134121967723,\n                30.02771920937811\n                ],\n                [\n                31.201376334034208,\n                30.02772794042386\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 3,\n            \"uid\": \"office-34\",\n            \"name\": \"office-34\",\n            \"label\": \"Office 34\",\n            \"space_type\": \"office\",\n            \"category\": \"service\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 3,\n            \"color\": \"#FFC107\",\n            \"opacity\": 0.7,\n            \"icon\": null,\n            \"poi\": true,\n            \"editable\": true,\n            \"selectable\": true,\n            \"routing_cost\": 0\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.20132297145994,\n                30.02778284951732\n                ],\n                [\n                31.201363254046278,\n                30.02779297685307\n                ],\n                [\n                31.201376290086714,\n                30.02774774408097\n                ],\n                [\n                31.201335963558236,\n                30.027737544298194\n                ],\n                [\n                31.20132297145994,\n                30.02778284951732\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 4,\n            \"uid\": \"lab-33\",\n            \"name\": \"lab-33\",\n            \"label\": \"Lab 33\",\n            \"space_type\": \"lab\",\n            \"category\": \"work\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 3.5,\n            \"color\": \"#9C27B0\",\n            \"opacity\": 0.75,\n            \"icon\": \"lab\",\n            \"poi\": true,\n            \"editable\": true,\n            \"selectable\": true,\n            \"routing_cost\": 0\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.20137006979758,\n                30.027794626583795\n                ],\n                [\n                31.201382895136028,\n                30.027749385881044\n                ],\n                [\n                31.20146233894676,\n                30.027768992303155\n                ],\n                [\n                31.201449110526255,\n                30.027814359899295\n                ],\n                [\n                31.20137006979758,\n                30.027794626583795\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 5,\n            \"uid\": \"office-30\",\n            \"name\": \"office-30\",\n            \"label\": \"Office 30\",\n            \"space_type\": \"office\",\n            \"category\": \"service\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 3,\n            \"color\": \"#FFC107\",\n            \"opacity\": 0.7,\n            \"icon\": null,\n            \"poi\": true,\n            \"editable\": true,\n            \"selectable\": true,\n            \"routing_cost\": 0\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.201449110526255,\n                30.027814359899295\n                ],\n                [\n                31.201468421821577,\n                30.027819150462427\n                ],\n                [\n                31.20148152198871,\n                30.02777381459409\n                ],\n                [\n                31.20146233894676,\n                30.027768992303155\n                ],\n                [\n                31.201449110526255,\n                30.027814359899295\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 6,\n            \"uid\": \"toilet-girls\",\n            \"name\": \"toilet-girls\",\n            \"label\": \"Girls Toilet\",\n            \"space_type\": \"toilet\",\n            \"category\": \"service\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 3,\n            \"color\": \"#E91E63\",\n            \"opacity\": 0.7,\n            \"icon\": \"toilet\",\n            \"poi\": true,\n            \"editable\": true,\n            \"selectable\": true,\n            \"routing_cost\": 0\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.20148152198871,\n                30.02777381459409\n                ],\n                [\n                31.201506308741987,\n                30.027779829047372\n                ],\n                [\n                31.20149328465626,\n                30.027825289362546\n                ],\n                [\n                31.201468421821577,\n                30.027819150462427\n                ],\n                [\n                31.20148152198871,\n                30.02777381459409\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 7,\n            \"uid\": \"hall-32\",\n            \"name\": \"hall-32\",\n            \"label\": \"Lecture Hall 32\",\n            \"space_type\": \"lecture_hall\",\n            \"category\": \"education\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 4,\n            \"color\": \"#4CAF50\",\n            \"opacity\": 0.7,\n            \"icon\": null,\n            \"poi\": true,\n            \"editable\": true,\n            \"selectable\": true,\n            \"routing_cost\": 0\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.20160711869598,\n                30.02773646562748\n                ],\n                [\n                31.201524605964966,\n                30.027715962950296\n                ],\n                [\n                31.201511613617104,\n                30.027761312485076\n                ],\n                [\n                31.201506308741987,\n                30.027779829047372\n                ],\n                [\n                31.20149328465626,\n                30.027825289362546\n                ],\n                [\n                31.20157573326059,\n                30.02784565718342\n                ],\n                [\n                31.20160711869598,\n                30.02773646562748\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 8,\n            \"uid\": \"lab-31\",\n            \"name\": \"lab-31\",\n            \"label\": \"Lab 31\",\n            \"space_type\": \"lab\",\n            \"category\": \"work\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 3.5,\n            \"color\": \"#9C27B0\",\n            \"opacity\": 0.75,\n            \"icon\": \"lab\",\n            \"poi\": true,\n            \"editable\": true,\n            \"selectable\": true,\n            \"routing_cost\": 0\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.201443256675386,\n                30.027695690279653\n                ],\n                [\n                31.20143050462457,\n                30.027741184811774\n                ],\n                [\n                31.201511613617104,\n                30.027761312485076\n                ],\n                [\n                31.201524605964966,\n                30.027715962950296\n                ],\n                [\n                31.201443256675386,\n                30.027695690279653\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 9,\n            \"uid\": \"elevator\",\n            \"name\": \"elevator\",\n            \"label\": \"Elevator\",\n            \"space_type\": \"elevator\",\n            \"category\": \"service\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 3,\n            \"color\": \"#607D8B\",\n            \"opacity\": 0.7,\n            \"icon\": \"elevator\",\n            \"poi\": true,\n            \"editable\": false,\n            \"selectable\": true,\n            \"routing_cost\": 0\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.201422487642947,\n                30.027704874846915\n                ],\n                [\n                31.201396030801913,\n                30.027698180740988\n                ],\n                [\n                31.201390607515943,\n                30.02771708920968\n                ],\n                [\n                31.201417174288448,\n                30.027723561235035\n                ],\n                [\n                31.201422487642947,\n                30.027704874846915\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 10,\n            \"uid\": \"stairs\",\n            \"name\": \"stairs\",\n            \"label\": \"Stairs\",\n            \"space_type\": \"stairs\",\n            \"category\": \"circulation\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 3,\n            \"color\": \"#795548\",\n            \"opacity\": 0.7,\n            \"icon\": \"stairs\",\n            \"poi\": false,\n            \"editable\": false,\n            \"selectable\": true,\n            \"routing_cost\": 0\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.201417174288448,\n                30.027723561235035\n                ],\n                [\n                31.201413216755437,\n                30.02773698116865\n                ],\n                [\n                31.201376334034208,\n                30.02772794042386\n                ],\n                [\n                31.20138949832934,\n                30.027682374498433\n                ],\n                [\n                31.201426316922575,\n                30.027691621468495\n                ],\n                [\n                31.201422487642947,\n                30.027704874846915\n                ],\n                [\n                31.201396030801913,\n                30.027698180740988\n                ],\n                [\n                31.201390607515943,\n                30.02771708920968\n                ],\n                [\n                31.201417174288448,\n                30.027723561235035\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 11,\n            \"uid\": \"wall-1\",\n            \"name\": \"wall\",\n            \"label\": \"Wall\",\n            \"space_type\": \"wall\",\n            \"category\": \"obstacle\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 4,\n            \"color\": \"#424242\",\n            \"opacity\": 0.9,\n            \"icon\": null,\n            \"poi\": false,\n            \"editable\": false,\n            \"selectable\": false,\n            \"routing_cost\": 999\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.201382895136028,\n                30.027749385881034\n                ],\n                [\n                31.201376290086714,\n                30.02774774408097\n                ],\n                [\n                31.201363254046278,\n                30.02779297685307\n                ],\n                [\n                31.20137006979758,\n                30.027794626583795\n                ],\n                [\n                31.201382895136028,\n                30.027749385881034\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 12,\n            \"uid\": \"wall-2\",\n            \"name\": \"wall\",\n            \"label\": \"Wall\",\n            \"space_type\": \"wall\",\n            \"category\": \"obstacle\",\n            \"floor\": 3,\n            \"walkable\": false,\n            \"height\": 4,\n            \"color\": \"#424242\",\n            \"opacity\": 0.9,\n            \"icon\": null,\n            \"poi\": false,\n            \"editable\": false,\n            \"selectable\": false,\n            \"routing_cost\": 999\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.20143050462457,\n                30.027741184811774\n                ],\n                [\n                31.201426646716993,\n                30.027740288563358\n                ],\n                [\n                31.201439838493684,\n                30.027694889207698\n                ],\n                [\n                31.201443256675386,\n                30.027695690279653\n                ],\n                [\n                31.20143050462457,\n                30.027741184811774\n                ]\n            ]\n            ]\n        }\n        },\n        {\n        \"type\": \"Feature\",\n        \"properties\": {\n            \"fid\": 13,\n            \"uid\": \"corridor\",\n            \"name\": \"corridor\",\n            \"label\": \"Main Corridor\",\n            \"space_type\": \"corridor\",\n            \"category\": \"circulation\",\n            \"floor\": 3,\n            \"walkable\": true,\n            \"height\": 5.6,\n            \"color\": \"#BDBDBD\",\n            \"opacity\": 0.5,\n            \"icon\": null,\n            \"poi\": false,\n            \"editable\": true,\n            \"selectable\": true,\n            \"routing_cost\": 1\n        },\n        \"geometry\": {\n            \"type\": \"Polygon\",\n            \"coordinates\": [\n            [\n                [\n                31.201439838493684,\n                30.027694889207698\n                ],\n                [\n                31.201426316922575,\n                30.027691621468495\n                ],\n                [\n                31.201413216755437,\n                30.02773698116865\n                ],\n                [\n                31.201341219677225,\n                30.027719209378112\n                ],\n                [\n                31.201335963558236,\n                30.027737544298194\n                ],\n                [\n                31.201506308741983,\n                30.02777982904737\n                ],\n                [\n                31.201511613617107,\n                30.027761312485072\n                ],\n                [\n                31.201426646716993,\n                30.027740288563358\n                ],\n                [\n                31.201439838493684,\n                30.027694889207698\n                ]\n            ]\n            ]\n        }\n        },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 14, \"uid\": null, \"name\": \"door-hall-32\", \"label\": null, \"space_type\": \"door\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": false, \"editable\": null, \"selectable\": null, \"width\": 1.2, \"routing_cost\": 1 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201506323914675, 30.02777979402078 ], [ 31.201511628783631, 30.027761256127071 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 15, \"uid\": null, \"name\": \"door-lab-31-1\", \"label\": null, \"space_type\": \"door\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": false, \"editable\": null, \"selectable\": null, \"width\": 1.2, \"routing_cost\": 1 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201501658057563, 30.027758887450485 ], [ 31.201511636928927, 30.027761276757712 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 16, \"uid\": null, \"name\": \"door-toilet-girls\", \"label\": null, \"space_type\": \"door\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": false, \"editable\": null, \"selectable\": null, \"width\": 1.2, \"routing_cost\": 1 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201481773686055, 30.027773930331985 ], [ 31.201488922137138, 30.027775717444754 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 17, \"uid\": null, \"name\": \"door-office\", \"label\": null, \"space_type\": \"door\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": false, \"editable\": null, \"selectable\": null, \"width\": 1.2, \"routing_cost\": 1 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201466091846772, 30.027770102096543 ], [ 31.201474463992067, 30.027772253272765 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 18, \"uid\": null, \"name\": \"door-lab-31-2\", \"label\": null, \"space_type\": \"door\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": false, \"editable\": null, \"selectable\": null, \"width\": 1.2, \"routing_cost\": 1 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201431165968536, 30.027741349908005 ], [ 31.20144195879913, 30.027744026062425 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 19, \"uid\": null, \"name\": \"door-lab-33-1\", \"label\": null, \"space_type\": \"door\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": false, \"editable\": null, \"selectable\": null, \"width\": 1.2, \"routing_cost\": 1 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.20145171549067, 30.027766370464306 ], [ 31.201462089413685, 30.027768835964658 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 20, \"uid\": null, \"name\": \"door-lab-33-2\", \"label\": null, \"space_type\": \"door\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": false, \"editable\": null, \"selectable\": null, \"width\": 1.2, \"routing_cost\": 1 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201383233887903, 30.027749459836947 ], [ 31.201393520421622, 30.027752037667081 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 22, \"uid\": null, \"name\": \"elevator\", \"label\": null, \"space_type\": \"elevator\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": false, \"editable\": null, \"selectable\": null, \"width\": 1.2, \"routing_cost\": 10 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201418088238533, 30.027719096674179 ], [ 31.201420134719125, 30.027711880137353 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 23, \"uid\": null, \"name\": \"stairs-up-door\", \"label\": null, \"space_type\": \"stairs\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": true, \"editable\": false, \"selectable\": false, \"width\": 1.2, \"routing_cost\": 10 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201413209660803, 30.02773639859566 ], [ 31.201416917585366, 30.027723361054459 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 24, \"uid\": null, \"name\": \"stairs-down-door\", \"label\": null, \"space_type\": \"stairs\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": true, \"editable\": false, \"selectable\": false, \"width\": 1.2, \"routing_cost\": 10 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201422135363149, 30.027704835562588 ], [ 31.201426021900982, 30.027691821549546 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 25, \"uid\": null, \"name\": \"door-toilet-boys\", \"label\": null, \"space_type\": \"door\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": false, \"editable\": null, \"selectable\": null, \"width\": 1.2, \"routing_cost\": 1 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201368227168846, 30.027725947306635 ], [ 31.201376121117452, 30.027727813149035 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 26, \"uid\": null, \"name\": \"door-hall-35\", \"label\": null, \"space_type\": \"door\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": false, \"editable\": null, \"selectable\": null, \"width\": 1.2, \"routing_cost\": 1 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201335977114738, 30.027737610825437 ], [ 31.201341197783414, 30.027719181236016 ] ] } },\n        { \"type\": \"Feature\", \"properties\": { \"fid\": 27, \"uid\": null, \"name\": \"door-office-34\", \"label\": null, \"space_type\": \"door\", \"category\": null, \"floor\": 3, \"walkable\": true, \"height\": null, \"color\": null, \"opacity\": null, \"icon\": null, \"poi\": false, \"editable\": null, \"selectable\": null, \"width\": 1.2, \"routing_cost\": 1 }, \"geometry\": { \"type\": \"LineString\", \"coordinates\": [ [ 31.201376124472777, 30.027747703631846 ], [ 31.201366058575552, 30.027745146813317 ] ] } }\n    ]\n    }\n  }\n"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/floors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "floors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Floor GeoJSON",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"floor_geojson\": {\n    \"type\": \"FeatureCollection\",\n    \"features\": []\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/floors/{{floorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "floors",
+                "{{floorId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Floor Map",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/floors/{{floorId}}/map",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "floors",
+                "{{floorId}}",
+                "map"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Graphs",
+      "item": [
+        {
+          "name": "Rebuild Graph Preview",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/graphs/rebuild/{{buildingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "graphs",
+                "rebuild",
+                "{{buildingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm Graph",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/graphs/confirm/{{buildingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "graphs",
+                "confirm",
+                "{{buildingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Rollback Graph",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/graphs/rollback/{{buildingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "graphs",
+                "rollback",
+                "{{buildingId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Navigation",
+      "item": [
+        {
+          "name": "Calculate Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"from\": {\n    \"floorId\": \"f5bb8f0d-ea83-4f30-864c-8d3c738f36f5\",\n    \"lat\": 30.02771092227816,\n    \"lng\": 31.201406546960303\n  },\n  \"to\": {\n    \"poiId\": \"694b1b35-754e-4086-a8f6-11290edfa56b\"\n  },\n  \"options\": {\n    \"accessible\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/navigation/route",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "navigation",
+                "route"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Service Status",
+      "item": [
+        {
+          "name": "Root",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "API Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "POI",
+      "item": [
+        {
+          "name": "PUT /api/admin/pois/:poi_id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const data = pm.response.json();",
+                  "pm.test('returns updated poi id', function () { pm.expect(data.id).to.not.be.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"lab-33-updated\",\n  \"type\": \"lab\",\n  \"geometry_wkt\": \"POINT(31.2015 30.0277)\",\n  \"metadata\": {\n    \"label\": \"Lab 33 Updated\",\n    \"space_type\": \"lab\",\n    \"walkable\": true,\n    \"selectable\": true,\n    \"editable\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/pois/{{poiId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "pois",
+                "{{poiId}}"
+              ]
+            },
+            "description": "Update an existing POI. All fields are optional — only provided fields are updated.\n\nFields:\n- name: slug-style name (e.g. lab-33)\n- type: lecture_hall | lab | office | toilet | elevator | stairs\n- geometry_wkt: WKT point string e.g. POINT(lng lat)\n- metadata: arbitrary JSON stored in extra_data"
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/admin/pois/:poi_id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+                  "const data = pm.response.json();",
+                  "pm.test('success is true', function () { pm.expect(data.success).to.be.true; });",
+                  "pm.test('id returned', function () { pm.expect(data.id).to.not.be.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/pois/{{poiId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "pois",
+                "{{poiId}}"
+              ]
+            },
+            "description": "Permanently delete a POI by its UUID. Returns { success: true, id: \"...\" } on success."
+          },
+          "response": []
+        },
+        {
+          "name": "get floor pois",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/pois/floor/{{floorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "pois",
+                "floor",
+                "{{floorId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "buildingId",
+      "value": ""
+    },
+    {
+      "key": "floorId",
+      "value": ""
+    },
+    {
+      "key": "poiId",
+      "value": ""
+    }
+  ]
+}
