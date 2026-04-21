@@ -16,10 +16,9 @@ from models.routing_nodes import RoutingNode
 from models.routing_edges import RoutingEdge
 from models.poi import POI
 from services.graph_persistence_service import persist_pipeline_output
-from .admin_auth import require_admin
 
 
-router = APIRouter(dependencies=[Depends(require_admin)])
+router = APIRouter()
 
 
 def _to_id(value):

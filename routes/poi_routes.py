@@ -1,5 +1,5 @@
 """
-POI CRUD routes - update and delete endpoints.
+POI CRUD routes - list by floor, update, and delete endpoints.
 Kept separate to avoid modifying admin_routes.py.
 """
 import uuid
@@ -13,10 +13,9 @@ from geoalchemy2 import WKTElement
 
 from database import get_db_session
 from models.poi import POI
-from .admin_auth import require_admin
 
 
-router = APIRouter(dependencies=[Depends(require_admin)])
+router = APIRouter()
 
 
 def _serialize_poi(row: POI) -> dict[str, Any]:
@@ -37,6 +36,18 @@ class POIUpdate(BaseModel):
     type: Optional[str] = None
     geometry_wkt: Optional[str] = None
     metadata: Optional[dict[str, Any]] = None
+
+
+@router.get("/floor/{floor_id}")
+async def get_pois_by_floor(floor_id: str, db: AsyncSession = Depends(get_db_session)):
+    try:
+        floor_uuid = uuid.UUID(floor_id)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail="Invalid floor_id") from e
+
+    result = await db.execute(select(POI).where(POI.floor_id == floor_uuid))
+    rows = result.scalars().all()
+    return [_serialize_poi(row) for row in rows]
 
 
 @router.put("/{poi_id}")
